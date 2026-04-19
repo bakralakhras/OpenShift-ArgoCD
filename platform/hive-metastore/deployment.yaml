@@ -24,6 +24,7 @@ spec:
           volumeMounts:
             - name: aux-jars
               mountPath: /aux-jars
+
       containers:
         - name: hive-metastore
           image: apache/hive:standalone-metastore-4.1.0
@@ -43,6 +44,7 @@ spec:
               subPath: core-site.xml
             - name: aux-jars
               mountPath: /aux-jars
+
       volumes:
         - name: config
           configMap:

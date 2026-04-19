@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    chart: postgresql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 18.3.0
+    helm:
+      valuesObject:
+        auth:
+          username: hive
+          password: hive123
+          database: metastore
+        primary:
+          resources:
+            requests:
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: postgresql
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

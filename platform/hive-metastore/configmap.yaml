@@ -23,12 +23,31 @@ data:
         <name>javax.jdo.option.ConnectionPassword</name>
         <value>hive123</value>
       </property>
-
       <property>
         <name>hive.metastore.warehouse.dir</name>
         <value>s3a://lakehouse/warehouse</value>
       </property>
+      <property>
+        <name>hive.metastore.event.db.notification.api.auth</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>metastore.storage.schema.reader.impl</name>
+        <value>org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader</value>
+      </property>
+      <property>
+        <name>hive.metastore.authorization.storage.checks</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+      </property>
+    </configuration>
 
+  core-site.xml: |
+    <?xml version="1.0"?>
+    <configuration>
       <property>
         <name>fs.s3a.endpoint</name>
         <value>http://minio.minio.svc.cluster.local:9000</value>
@@ -72,22 +91,5 @@ data:
       <property>
         <name>fs.s3a.connection.timeout</name>
         <value>200000</value>
-      </property>
-
-      <property>
-        <name>hive.metastore.event.db.notification.api.auth</name>
-        <value>false</value>
-      </property>
-      <property>
-        <name>metastore.storage.schema.reader.impl</name>
-        <value>org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader</value>
-      </property>
-      <property>
-        <name>hive.metastore.authorization.storage.checks</name>
-        <value>false</value>
-      </property>
-      <property>
-        <name>hive.metastore.schema.verification</name>
-        <value>false</value>
       </property>
     </configuration>

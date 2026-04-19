@@ -40,6 +40,9 @@ spec:
             - name: config
               mountPath: /opt/hive/conf/metastore-site.xml
               subPath: metastore-site.xml
+            - name: config
+              mountPath: /opt/hadoop/etc/hadoop/core-site.xml
+              subPath: core-site.xml
             - name: aux-jars
               mountPath: /aux-jars
       volumes:

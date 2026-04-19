@@ -17,6 +17,11 @@ spec:
         persistence:
           size: 10Gi
         mode: standalone
+        resources:
+          requests:
+            memory: 512Mi
+          limits:
+            memory: 2Gi
   destination:
     server: "https://kubernetes.default.svc"
     namespace: minio

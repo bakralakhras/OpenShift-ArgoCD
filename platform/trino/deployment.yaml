@@ -1,50 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trino
-  namespace: trino
-  labels:
-    app: trino
+  name: hive-metastore
+  namespace: lakehouse
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trino
+      app: hive-metastore
   template:
     metadata:
       labels:
-        app: trino
+        app: hive-metastore
     spec:
+      initContainers:
+        - name: download-jars
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              curl -L https://jdbc.postgresql.org/download/postgresql-42.7.3.jar \
+                -o /aux-jars/postgresql-42.7.3.jar
+              curl -L https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar \
+                -o /aux-jars/hadoop-aws-3.3.6.jar
+              curl -L https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar \
+                -o /aux-jars/aws-java-sdk-bundle-1.12.262.jar
+          volumeMounts:
+            - name: aux-jars
+              mountPath: /aux-jars
       containers:
-        - name: trino
-          image: trinodb/trino:435
+        - name: hive-metastore
+          image: apache/hive:standalone-metastore-4.1.0
           ports:
-            - containerPort: 8080
+            - containerPort: 9083
+          env:
+            - name: DB_DRIVER
+              value: postgres
+            - name: METASTORE_AUX_JARS_PATH
+              value: /aux-jars
           volumeMounts:
             - name: config
-              mountPath: /etc/trino/config.properties
-              subPath: config.properties
-            - name: config
-              mountPath: /etc/trino/node.properties
-              subPath: node.properties
-            - name: config
-              mountPath: /etc/trino/jvm.config
-              subPath: jvm.config
-            - name: config
-              mountPath: /etc/trino/catalog/iceberg.properties
-              subPath: iceberg.properties
-            - name: data
-              mountPath: /data/trino
-          resources:
-            requests:
-              memory: "2Gi"
-              cpu: "500m"
-            limits:
-              memory: "3Gi"
-              cpu: "1"
+              mountPath: /opt/hive/conf/metastore-site.xml
+              subPath: metastore-site.xml
+            - name: aux-jars
+              mountPath: /aux-jars
       volumes:
         - name: config
           configMap:
-            name: trino-config
-        - name: data
+            name: hive-metastore-config
+        - name: aux-jars
           emptyDir: {}

@@ -23,10 +23,12 @@ data:
         <name>javax.jdo.option.ConnectionPassword</name>
         <value>hive123</value>
       </property>
+
       <property>
         <name>hive.metastore.warehouse.dir</name>
         <value>s3a://lakehouse/warehouse</value>
       </property>
+
       <property>
         <name>fs.s3a.endpoint</name>
         <value>http://minio.minio.svc.cluster.local:9000</value>
@@ -38,6 +40,10 @@ data:
       <property>
         <name>fs.s3a.secret.key</name>
         <value>minio1234</value>
+      </property>
+      <property>
+        <name>fs.s3a.aws.credentials.provider</name>
+        <value>org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider</value>
       </property>
       <property>
         <name>fs.s3a.path.style.access</name>
@@ -67,6 +73,7 @@ data:
         <name>fs.s3a.connection.timeout</name>
         <value>200000</value>
       </property>
+
       <property>
         <name>hive.metastore.event.db.notification.api.auth</name>
         <value>false</value>

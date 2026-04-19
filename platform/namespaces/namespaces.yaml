@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio
+  labels:
+    project: sovereign-data-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lakehouse
+  labels:
+    project: sovereign-data-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kafka
+  labels:
+    project: sovereign-data-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nifi
+  labels:
+    project: sovereign-data-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    project: sovereign-data-platform
+---
+apiVersion: v1
+    project: sovereign-data-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: governance
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: superset
+  labels:
+    project: sovereign-data-platform  labels:
+    project: sovereign-data-platform
+---
+kind: Namespace
+metadata:
+  name: vault

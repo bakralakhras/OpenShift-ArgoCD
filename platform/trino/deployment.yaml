@@ -33,6 +33,8 @@ spec:
             - name: config
               mountPath: /etc/trino/catalog/iceberg.properties
               subPath: iceberg.properties
+            - name: data
+              mountPath: /data/trino
           resources:
             requests:
               memory: "2Gi"
@@ -44,3 +46,5 @@ spec:
         - name: config
           configMap:
             name: trino-config
+        - name: data
+          emptyDir: {}

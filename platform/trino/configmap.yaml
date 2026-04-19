@@ -1,34 +1,86 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: trino-config
-  namespace: trino
+  name: hive-metastore-config
+  namespace: lakehouse
 data:
-  config.properties: |
-    coordinator=true
-    node-scheduler.include-coordinator=true
-    http-server.http.port=8080
-    discovery.uri=http://localhost:8080
-  node.properties: |
-    node.environment=production
-    node.data-dir=/data/trino
-  jvm.config: |
-    -server
-    -Xmx2G
-    -XX:+UseG1GC
-    -XX:G1HeapRegionSize=32M
-    -XX:+UseGCOverheadLimit
-    -XX:+ExplicitGCInvokesConcurrent
-    -XX:+HeapDumpOnOutOfMemoryError
-    -XX:+ExitOnOutOfMemoryError
-  iceberg.properties: |
-    connector.name=iceberg
-    iceberg.catalog.type=hive_metastore
-    hive.metastore.uri=thrift://hive-metastore.lakehouse.svc.cluster.local:9083
-    fs.native-s3.enabled=true
-    s3.endpoint=http://minio.minio.svc.cluster.local:9000
-    s3.aws-access-key=admin
-    s3.aws-secret-key=minio1234
-    s3.path-style-access=true
-    s3.region=us-east-1
-    iceberg.file-format=PARQUET
+  metastore-site.xml: |
+    <?xml version="1.0"?>
+    <configuration>
+      <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:postgresql://postgresql.postgresql.svc.cluster.local:5432/metastore</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.postgresql.Driver</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hive</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>hive123</value>
+      </property>
+      <property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>s3a://lakehouse/warehouse</value>
+      </property>
+      <property>
+        <name>fs.s3a.endpoint</name>
+        <value>http://minio.minio.svc.cluster.local:9000</value>
+      </property>
+      <property>
+        <name>fs.s3a.access.key</name>
+        <value>admin</value>
+      </property>
+      <property>
+        <name>fs.s3a.secret.key</name>
+        <value>minio1234</value>
+      </property>
+      <property>
+        <name>fs.s3a.path.style.access</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>fs.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+      </property>
+      <property>
+        <name>fs.AbstractFileSystem.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3A</value>
+      </property>
+      <property>
+        <name>fs.s3a.connection.ssl.enabled</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>fs.s3a.threads.keepalivetime</name>
+        <value>60</value>
+      </property>
+      <property>
+        <name>fs.s3a.connection.establish.timeout</name>
+        <value>5000</value>
+      </property>
+      <property>
+        <name>fs.s3a.connection.timeout</name>
+        <value>200000</value>
+      </property>
+      <property>
+        <name>hive.metastore.event.db.notification.api.auth</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>metastore.storage.schema.reader.impl</name>
+        <value>org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader</value>
+      </property>
+      <property>
+        <name>hive.metastore.authorization.storage.checks</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+      </property>
+    </configuration>

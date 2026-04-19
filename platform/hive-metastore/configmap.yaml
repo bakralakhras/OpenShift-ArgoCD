@@ -25,7 +25,7 @@ data:
       </property>
       <property>
         <name>hive.metastore.warehouse.dir</name>
-        <value>s3://lakehouse/</value>
+        <value>s3a://lakehouse/warehouse</value>
       </property>
       <property>
         <name>fs.s3a.endpoint</name>
@@ -48,8 +48,24 @@ data:
         <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
       </property>
       <property>
+        <name>fs.AbstractFileSystem.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3A</value>
+      </property>
+      <property>
         <name>fs.s3a.connection.ssl.enabled</name>
         <value>false</value>
+      </property>
+      <property>
+        <name>fs.s3a.threads.keepalivetime</name>
+        <value>60</value>
+      </property>
+      <property>
+        <name>fs.s3a.connection.establish.timeout</name>
+        <value>5000</value>
+      </property>
+      <property>
+        <name>fs.s3a.connection.timeout</name>
+        <value>200000</value>
       </property>
       <property>
         <name>hive.metastore.event.db.notification.api.auth</name>
@@ -65,14 +81,6 @@ data:
       </property>
       <property>
         <name>hive.metastore.schema.verification</name>
-        <value>false</value>
-      </property>
-      <property>
-        <name>hive.metastore.create.as.acid</name>
-        <value>false</value>
-      </property>
-      <property>
-        <name>hive.metastore.allow.new.db.location.check</name>
         <value>false</value>
       </property>
     </configuration>

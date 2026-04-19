@@ -16,6 +16,8 @@ spec:
           password: hive123
           database: metastore
         primary:
+          persistence:
+            storageClass: local-storage
           resources:
             requests:
               memory: 256Mi

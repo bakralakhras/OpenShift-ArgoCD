@@ -15,7 +15,7 @@ spec:
         rootPassword: minio1234
         replicas: 1
         persistence:
-          size: 10Gi
+          storageClass: local-storage
         mode: standalone
         resources:
           requests:

@@ -13,6 +13,18 @@ spec:
       labels:
         app: hive-metastore
     spec:
+      initContainers:
+        - name: download-postgres-driver
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              curl -L https://jdbc.postgresql.org/download/postgresql-42.7.3.jar \
+              -o /opt/hive/lib/postgresql-42.7.3.jar
+          volumeMounts:
+            - name: hive-lib
+              mountPath: /opt/hive/lib
       containers:
         - name: hive-metastore
           image: apache/hive:standalone-metastore-4.1.0
@@ -25,7 +37,11 @@ spec:
             - name: config
               mountPath: /opt/hive/conf/metastore-site.xml
               subPath: metastore-site.xml
+            - name: hive-lib
+              mountPath: /opt/hive/lib
       volumes:
         - name: config
           configMap:
             name: hive-metastore-config
+        - name: hive-lib
+          emptyDir: {}

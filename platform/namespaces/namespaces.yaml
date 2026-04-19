@@ -34,20 +34,22 @@ metadata:
     project: sovereign-data-platform
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault
+  labels:
     project: sovereign-data-platform
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: governance
+  labels:
+    project: sovereign-data-platform
+---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: superset
   labels:
-    project: sovereign-data-platform  labels:
     project: sovereign-data-platform
----
-kind: Namespace
-metadata:
-  name: vault

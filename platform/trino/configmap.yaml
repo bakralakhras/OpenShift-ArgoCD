@@ -9,11 +9,9 @@ data:
     node-scheduler.include-coordinator=true
     http-server.http.port=8080
     discovery.uri=http://localhost:8080
-
   node.properties: |
     node.environment=production
     node.data-dir=/data/trino
-
   jvm.config: |
     -server
     -Xmx2G
@@ -23,15 +21,14 @@ data:
     -XX:+ExplicitGCInvokesConcurrent
     -XX:+HeapDumpOnOutOfMemoryError
     -XX:+ExitOnOutOfMemoryError
-
   iceberg.properties: |
     connector.name=iceberg
     iceberg.catalog.type=hive_metastore
     hive.metastore.uri=thrift://hive-metastore.lakehouse.svc.cluster.local:9083
-    hive.s3.endpoint=http://minio.minio.svc.cluster.local:9000
-    hive.s3.aws-access-key=admin
-    hive.s3.aws-secret-key=minio1234
-    hive.s3.path-style-access=true
-    hive.s3.ssl.enabled=false
-    hive.s3.ssl.enabled=false
+    fs.native-s3.enabled=true
+    s3.endpoint=http://minio.minio.svc.cluster.local:9000
+    s3.access-key=admin
+    s3.secret-key=minio1234
+    s3.path-style-access=true
+    s3.region=us-east-1
     iceberg.file-format=PARQUET

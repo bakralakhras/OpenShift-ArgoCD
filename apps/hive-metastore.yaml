@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hive-metastore
+  namespace: openshift-gitops
+  labels:
+    project: sovereign-data-platform
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+    targetRevision: HEAD
+    path: platform/hive-metastore
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lakehouse
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

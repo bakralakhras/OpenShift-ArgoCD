@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hive-metastore
+  namespace: lakehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hive-metastore
+  template:
+    metadata:
+      labels:
+        app: hive-metastore
+    spec:
+      containers:
+        - name: hive-metastore
+          image: apache/hive:standalone-metastore-4.1.0
+          ports:
+            - containerPort: 9083
+          volumeMounts:
+            - name: config
+              mountPath: /opt/hive/conf/metastore-site.xml
+              subPath: metastore-site.xml
+      volumes:
+        - name: config
+          configMap:
+            name: hive-metastore-config

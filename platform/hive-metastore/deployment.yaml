@@ -18,6 +18,9 @@ spec:
           image: apache/hive:standalone-metastore-4.1.0
           ports:
             - containerPort: 9083
+          env:
+            - name: DB_DRIVER
+              value: postgres
           volumeMounts:
             - name: config
               mountPath: /opt/hive/conf/metastore-site.xml

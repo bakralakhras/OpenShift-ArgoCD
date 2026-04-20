@@ -18,8 +18,3 @@ spec:
       offsets.topic.replication.factor: 3
       transaction.state.log.replication.factor: 3
       transaction.state.log.min.isr: 3
-  zookeeper:
-    replicas: 0
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}

@@ -19,8 +19,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   vaultConnectionRef: vault-connection
-  method: token
-  mount: token
-  token:
-    secretName: vault-root-token
-    key: token
+  method: appRole
+  mount: approle
+  appRole:
+    roleId: 9f4564ec-cdb3-2972-350c-ef33d4cb17a1
+    secretRef:
+      name: vault-approle
+      key: secret-id

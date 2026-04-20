@@ -1,0 +1,24 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: s3-sink-connector
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-connect
+spec:
+  class: io.aiven.kafka.connect.s3.AivenKafkaConnectS3SinkConnector
+  tasksMax: 1
+  config:
+    connector.class: io.aiven.kafka.connect.s3.AivenKafkaConnectS3SinkConnector
+    tasks.max: "1"
+    topics: lakehouse-events
+    aws.access.key.id: admin
+    aws.secret.access.key: minio1234
+    aws.s3.bucket.name: lakehouse
+    aws.s3.endpoint: http://minio.minio.svc.cluster.local:9000
+    aws.s3.region: us-east-1
+    format.output.type: jsonl
+    file.name.prefix: kafka/
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: "false"

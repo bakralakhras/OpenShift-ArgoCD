@@ -21,6 +21,11 @@ spec:
   vaultConnectionRef: vault-connection
   method: appRole
   mount: approle
+  allowedNamespaces:
+    - minio
+    - postgresql
+    - nifi
+    - monitoring
   appRole:
     roleId: 9f4564ec-cdb3-2972-350c-ef33d4cb17a1
     secretRef: vault-approle

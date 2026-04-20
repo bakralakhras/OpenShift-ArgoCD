@@ -23,6 +23,4 @@ spec:
   mount: approle
   appRole:
     roleId: 9f4564ec-cdb3-2972-350c-ef33d4cb17a1
-    secretRef:
-      name: vault-approle
-      key: secret-id
+    secretRef: vault-approle

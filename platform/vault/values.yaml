@@ -19,7 +19,7 @@ server:
     devRootToken: "root"   # Static root token in dev mode — fine for lab, never do this in prod
 
   image:
-    repository: hashicorp/vault
+    repository: docker.io/hashicorp/vault
     tag: "1.17.2"
 
   resources:

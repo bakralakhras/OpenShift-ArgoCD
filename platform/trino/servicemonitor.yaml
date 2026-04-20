@@ -1,18 +1,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: minio
-  namespace: monitoring
+  name: trino
+  namespace: trino
   labels:
-    app: minio
+    app: trino
 spec:
   selector:
     matchLabels:
-      app: minio
-  namespaceSelector:
-    matchNames:
-      - minio
+      app: trino
   endpoints:
     - port: http
-      path: /minio/health/live
+      path: /v1/info
       interval: 30s

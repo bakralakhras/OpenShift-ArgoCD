@@ -19,12 +19,17 @@ spec:
           env:
             - name: NIFI_WEB_HTTPS_PORT
               value: "8443"
-            - name: NIFI_WEB_HTTPS_HOST
-              value: "nifi-nifi.apps.ocp4.infrahub.com"
             - name: SINGLE_USER_CREDENTIALS_USERNAME
               value: "admin"
             - name: SINGLE_USER_CREDENTIALS_PASSWORD
               value: "admin1234567890"
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx1536m"
+          resources:
+            requests:
+              memory: "1Gi"
+            limits:
+              memory: "2Gi"
           ports:
             - containerPort: 8443
             - containerPort: 8080

@@ -12,7 +12,7 @@ spec:
   build:
     output:
       type: docker
-      image: default-route-openshift-image-registry.apps.ocp4.infrahub.com/kafka/kafka-connect-s3:latest
+      image: image-registry.openshift-image-registry.svc:5000/kafka/kafka-connect-s3:latest
     plugins:
       - name: kafka-connect-s3
         artifacts:

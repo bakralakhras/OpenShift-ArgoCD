@@ -8,6 +8,6 @@ spec:
     kind: Service
     name: nifi
   port:
-    targetPort: http
+    targetPort: https
   tls:
-    termination: edge
+    termination: passthrough

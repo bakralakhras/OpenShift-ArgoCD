@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kafka-resources-metrics
+  namespace: monitoring
+  labels:
+    app: strimzi
+spec:
+  selector:
+    matchExpressions:
+      - key: strimzi.io/kind
+        operator: In
+        values:
+          - Kafka
+          - KafkaConnect
+  namespaceSelector:
+    matchNames:
+      - kafka
+  podMetricsEndpoints:
+    - path: /metrics
+      port: tcp-prometheus
+      relabelings:
+        - separator: ;
+          regex: __meta_kubernetes_pod_label_(.+)
+          replacement: $1
+          action: labelmap

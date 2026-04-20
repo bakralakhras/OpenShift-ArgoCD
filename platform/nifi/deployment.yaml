@@ -20,9 +20,15 @@ spec:
             - name: NIFI_WEB_HTTPS_PORT
               value: "8443"
             - name: SINGLE_USER_CREDENTIALS_USERNAME
-              value: "admin"
+              valueFrom:
+                secretKeyRef:
+                  name: nifi-credentials
+                  key: username
             - name: SINGLE_USER_CREDENTIALS_PASSWORD
-              value: "admin1234567890"
+              valueFrom:
+                secretKeyRef:
+                  name: nifi-credentials
+                  key: password
             - name: JAVA_OPTS
               value: "-Xms512m -Xmx1536m"
             - name: NIFI_WEB_PROXY_HOST

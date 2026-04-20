@@ -21,10 +21,11 @@ spec:
             - -c
             - |
               curl -L https://jdbc.postgresql.org/download/postgresql-42.7.3.jar -o /aux-jars/postgresql-42.7.3.jar
+              curl -L https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar -o /aux-jars/hadoop-aws-3.3.6.jar
+              curl -L https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar -o /aux-jars/aws-java-sdk-bundle-1.12.262.jar
           volumeMounts:
             - name: aux-jars
               mountPath: /aux-jars
-
       containers:
         - name: hive-metastore
           image: apache/hive:standalone-metastore-4.1.0
@@ -44,7 +45,6 @@ spec:
               subPath: core-site.xml
             - name: aux-jars
               mountPath: /aux-jars
-
       volumes:
         - name: config
           configMap:

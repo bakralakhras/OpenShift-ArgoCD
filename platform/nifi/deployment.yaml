@@ -36,13 +36,7 @@ spec:
           volumeMounts:
             - name: nifi-data
               mountPath: /opt/nifi/nifi-current/data
-            - name: nifi-properties
-              mountPath: /opt/nifi/nifi-current/conf/nifi.properties
-              subPath: nifi.properties
       volumes:
         - name: nifi-data
           persistentVolumeClaim:
             claimName: nifi-data
-        - name: nifi-properties
-          configMap:
-            name: nifi-properties

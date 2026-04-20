@@ -27,5 +27,5 @@ spec:
     - nifi
     - monitoring
   appRole:
-    roleId: c28b2ede-acaf-fca3-47cb-9d259604ed6b
+    roleId: 1e66adf4-c0ef-e959-4a38-ff7279ae172f
     secretRef: vault-approle

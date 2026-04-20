@@ -1,23 +1,22 @@
 ---
-# VaultConnection — tells VSO where Vault is
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultConnection
 metadata:
   name: vault-connection
   namespace: vault
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   address: http://vault.vault.svc.cluster.local:8200
   skipTLSVerify: true
-
 ---
-# VaultAuth — how VSO authenticates to Vault
-# Using token auth in dev mode (root token)
-# In prod mode this would be kubernetes auth method
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
   name: vault-auth
   namespace: vault
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   vaultConnectionRef: vault-connection
   method: token

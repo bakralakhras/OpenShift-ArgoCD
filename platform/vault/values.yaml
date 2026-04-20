@@ -1,0 +1,79 @@
+# HashiCorp Vault - Helm Values
+# Phase 7 - Sovereign Data Platform
+# Mode: dev (single pod, in-memory storage, auto-unsealed)
+# Storage: NFS (nfs-storage storageclass)
+# Note: NFS is not recommended for production Raft storage
+#       This is acceptable for portfolio/lab use
+
+global:
+  openshift: true
+
+injector:
+  enabled: false  # Disable agent injector for now, enable in Phase 8 when integrating with app pods
+
+server:
+  # Dev mode: auto-init, auto-unseal, in-memory — great for demo/portfolio
+  # To switch to prod mode later: set dev: false and configure ha or standalone with raft
+  dev:
+    enabled: true
+    devRootToken: "root"   # Static root token in dev mode — fine for lab, never do this in prod
+
+  image:
+    repository: hashicorp/vault
+    tag: "1.17.2"
+
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+  # OpenShift requires a specific security context
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: null   # Let OpenShift assign the UID from the namespace SCC
+
+  # Readiness/liveness — dev mode initializes instantly so these are tight
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
+  livenessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true"
+    initialDelaySeconds: 60
+
+  dataStorage:
+    enabled: true
+    size: 5Gi
+    storageClass: nfs-storage
+    accessMode: ReadWriteOnce
+
+  auditStorage:
+    enabled: false  # Enable in prod mode
+
+  # Expose Vault UI via OpenShift Route
+  route:
+    enabled: true
+    host: vault.apps.ocp4.infrahub.com
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+
+  service:
+    enabled: true
+    port: 8200
+    targetPort: 8200
+
+  # Vault UI
+  ui:
+    enabled: true
+    serviceType: ClusterIP
+
+  # Standalone HA disabled — single replica in dev mode
+  ha:
+    enabled: false
+
+ui:
+  enabled: true

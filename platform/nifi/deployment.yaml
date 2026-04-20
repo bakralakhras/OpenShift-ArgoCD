@@ -17,8 +17,8 @@ spec:
         - name: nifi
           image: apache/nifi:2.9.0
           env:
-            - name: NIFI_WEB_HTTPS_PORT
-              value: "8443"
+            - name: NIFI_WEB_HTTP_PORT
+              value: "8080"
             - name: SINGLE_USER_CREDENTIALS_USERNAME
               value: "admin"
             - name: SINGLE_USER_CREDENTIALS_PASSWORD

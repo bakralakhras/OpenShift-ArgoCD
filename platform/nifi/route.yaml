@@ -1,13 +1,13 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: nifi 
+  name: nifi
   namespace: nifi
 spec:
   to:
     kind: Service
     name: nifi
   port:
-    targetPort: https 
+    targetPort: http
   tls:
-    termination: passthrough
+    termination: edge

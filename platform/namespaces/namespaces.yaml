@@ -5,6 +5,7 @@ metadata:
   labels:
     project: sovereign-data-platform
     argocd.argoproj.io/managed-by: openshift-gitops
+    openshift.io/cluster-monitoring: "true"
 ---
 apiVersion: v1
 kind: Namespace
@@ -21,6 +22,7 @@ metadata:
   labels:
     project: sovereign-data-platform
     argocd.argoproj.io/managed-by: openshift-gitops
+    openshift.io/cluster-monitoring: "true"
 ---
 apiVersion: v1
 kind: Namespace
@@ -29,6 +31,7 @@ metadata:
   labels:
     project: sovereign-data-platform
     argocd.argoproj.io/managed-by: openshift-gitops
+    openshift.io/cluster-monitoring: "true"
 ---
 apiVersion: v1
 kind: Namespace
@@ -37,6 +40,7 @@ metadata:
   labels:
     project: sovereign-data-platform
     argocd.argoproj.io/managed-by: openshift-gitops
+    openshift.io/cluster-monitoring: "true"
 ---
 apiVersion: v1
 kind: Namespace

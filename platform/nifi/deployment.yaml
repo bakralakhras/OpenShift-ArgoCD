@@ -25,6 +25,8 @@ spec:
               value: "admin1234567890"
             - name: JAVA_OPTS
               value: "-Xms512m -Xmx1536m"
+            - name: NIFI_WEB_PROXY_HOST
+              value: "nifi-nifi.apps.ocp4.infrahub.com:443"
           resources:
             requests:
               memory: "1Gi"

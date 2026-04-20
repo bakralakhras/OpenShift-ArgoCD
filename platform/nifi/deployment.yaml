@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nifi
-          image: apache/nifi:2.9.0
+          image: apache/nifi:1.27.0
           env:
             - name: NIFI_WEB_HTTPS_PORT
               value: "8443"
@@ -25,12 +25,6 @@ spec:
               value: "admin1234567890"
             - name: JAVA_OPTS
               value: "-Xms512m -Xmx1536m"
-            - name: NIFI_WEB_HTTPS_SNI_REQUIRED
-              value: "false"
-            - name: NIFI_WEB_HTTPS_SNI_HOST_CHECK
-              value: "false"
-            - name: NIFI_WEB_PROXY_HOST
-              value: "nifi-nifi.apps.ocp4.infrahub.com:443"
           resources:
             requests:
               memory: "1Gi"

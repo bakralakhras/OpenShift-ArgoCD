@@ -92,4 +92,8 @@ data:
         <name>fs.s3a.connection.timeout</name>
         <value>200000</value>
       </property>
+      <property>
+        <name>fs.s3a.multipart.purge.age</name>
+        <value>86400</value>
+      </property>
     </configuration>

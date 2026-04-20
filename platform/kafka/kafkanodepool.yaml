@@ -7,11 +7,10 @@ metadata:
     strimzi.io/cluster: lakehouse-kafka
 spec:
   replicas: 3
-  roles: 
+  roles:
     - broker
     - controller
   storage:
     type: persistent-claim
     size: 10Gi
-    storageClassName: nfs-storage
-
+    class: nfs-storage

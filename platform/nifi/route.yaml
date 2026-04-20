@@ -10,4 +10,6 @@ spec:
   port:
     targetPort: https
   tls:
-    termination: passthrough
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect
+    destinationCACertificate: ""

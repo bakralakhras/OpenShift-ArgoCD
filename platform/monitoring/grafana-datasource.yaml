@@ -4,6 +4,7 @@ metadata:
   name: grafana-datasource
   namespace: monitoring
 spec:
+  allowCrossNamespaceImport: true
   valuesFrom:
     - targetPath: "secureJsonData.httpHeaderValue1"
       valueFrom:

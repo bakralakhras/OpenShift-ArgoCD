@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: <your-repo-url>
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
     targetRevision: HEAD
     path: platform/signal-engine
   destination:

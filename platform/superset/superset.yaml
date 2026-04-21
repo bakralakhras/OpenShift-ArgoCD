@@ -37,7 +37,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              pip install --target=/tmp/pkgs psycopg2-binary sqlalchemy-trino trino && \
+              pip install --target=/tmp/pkgs psycopg2-binary trino sqlalchemy-trino --no-deps && \
               export PYTHONPATH=/tmp/pkgs && \
               superset db upgrade && \
               (superset fab list-users | grep -q "admin" || superset fab create-admin \

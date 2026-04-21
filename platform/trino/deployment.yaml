@@ -35,6 +35,9 @@ spec:
               subPath: iceberg.properties
             - name: data
               mountPath: /data/trino
+            - name: config
+              mountPath: /etc/trino/catalog/hive.properties
+              subPath: hive.properties
           resources:
             requests:
               memory: "2Gi"

@@ -26,6 +26,7 @@ spec:
     - postgresql
     - nifi
     - monitoring
+    - superset
   appRole:
     roleId: 1e66adf4-c0ef-e959-4a38-ff7279ae172f
     secretRef: vault-approle

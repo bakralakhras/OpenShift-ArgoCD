@@ -19,9 +19,14 @@ spec:
 
         postgresql:
           enabled: true
+          primary:
+            persistence:
+              storageClass: local-storage
 
         redis:
           enabled: true
+          persistence:
+            storageClass: local-storage
 
         dags:
           persistence:
@@ -40,6 +45,12 @@ spec:
 
         triggerer:
           enabled: true
+          persistence:
+            enabled: false
+
+        workers:
+          persistence:
+            enabled: false
 
         flower:
           enabled: false

@@ -37,7 +37,8 @@ spec:
             - /bin/sh
             - -c
             - |
-              /app/.venv/bin/python3 -m pip install psycopg2-binary sqlalchemy-trino trino && \
+              pip install --target=/tmp/pkgs psycopg2-binary sqlalchemy-trino trino && \
+              export PYTHONPATH=/tmp/pkgs && \
               superset db upgrade && \
               (superset fab list-users | grep -q "admin" || superset fab create-admin \
                 --username admin \
@@ -46,7 +47,7 @@ spec:
                 --email admin@superset.local \
                 --password admin1234567890) && \
               superset init && \
-              /usr/bin/run-server.sh
+              PYTHONPATH=/tmp/pkgs /usr/bin/run-server.sh
           ports:
             - containerPort: 8088
               name: http
@@ -58,6 +59,8 @@ spec:
               value: /app/pythonpath/superset_config.py
             - name: TALISMAN_ENABLED
               value: "False"
+            - name: PYTHONPATH
+              value: /tmp/pkgs
           volumeMounts:
             - name: superset-config
               mountPath: /app/pythonpath/superset_config.py

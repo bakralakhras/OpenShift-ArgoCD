@@ -37,7 +37,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              pip install psycopg2-binary sqlalchemy-trino trino && \
+              /app/.venv/bin/pip install psycopg2-binary sqlalchemy-trino trino && \
               superset db upgrade && \
               (superset fab list-users | grep -q "admin" || superset fab create-admin \
                 --username admin \

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: signal-engine
-          image: default-route-openshift-image-registry.apps.ocp4.infrahub.com/kafka/signal-engine:v1
+          image: image-registry.openshift-image-registry.svc:5000/kafka/signal-engine:v1
           imagePullPolicy: Always
           env:
             - name: KAFKA_BOOTSTRAP

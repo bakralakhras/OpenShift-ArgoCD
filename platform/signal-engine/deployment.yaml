@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signal-engine
+  namespace: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: signal-engine
+  template:
+    metadata:
+      labels:
+        app: signal-engine
+    spec:
+      containers:
+        - name: signal-engine
+          image: default-route-openshift-image-registry.apps.ocp4.infrahub.com/kafka/signal-engine:v1
+          imagePullPolicy: Always
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: lakehouse-kafka-kafka-bootstrap:9092

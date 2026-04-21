@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: signal-engine
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: <your-repo-url>
+    targetRevision: HEAD
+    path: platform/signal-engine
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kafka
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

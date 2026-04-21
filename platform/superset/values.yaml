@@ -1,6 +1,5 @@
 image:
   repository: apachesuperset.docker.scarf.sh/apache/superset
-  tag: "latest"
   pullPolicy: IfNotPresent
 
 initImage:
@@ -35,6 +34,21 @@ configOverrides:
     SECRET_KEY = os.getenv("SUPERSET_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 
+supersetNode:
+  replicas:
+    enabled: true
+    replicaCount: 1
+
+supersetWorker:
+  replicas:
+    enabled: false
+
+supersetCeleryBeat:
+  enabled: false
+
+supersetCeleryFlower:
+  enabled: false
+
 init:
   adminUser:
     username: admin
@@ -42,12 +56,3 @@ init:
     lastname: User
     email: admin@superset.local
     password: admin1234567890
-
-supersetWorker:
-  enabled: false
-
-supersetCeleryBeat:
-  enabled: false
-
-supersetCeleryFlower:
-  enabled: false

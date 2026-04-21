@@ -25,8 +25,9 @@ spec:
 
         redis:
           enabled: true
-          persistence:
-            storageClass: local-storage
+          master:
+            persistence:
+              storageClass: local-storage
 
         dags:
           persistence:
@@ -46,11 +47,13 @@ spec:
         triggerer:
           enabled: true
           persistence:
-            enabled: false
+            enabled: true
+            storageClass: local-storage
 
         workers:
           persistence:
-            enabled: false
+            enabled: true
+            storageClass: local-storage
 
         flower:
           enabled: false

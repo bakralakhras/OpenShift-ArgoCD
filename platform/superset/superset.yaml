@@ -6,10 +6,8 @@ metadata:
 data:
   superset_config.py: |
     import os
-
     SECRET_KEY = os.getenv("SUPERSET_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
-
     TALISMAN_ENABLED = False
     WTF_CSRF_ENABLED = True
     MAPBOX_API_KEY = ""
@@ -33,12 +31,13 @@ spec:
       serviceAccountName: default
       containers:
         - name: superset
-          image: apachesuperset.docker.scarf.sh/apache/superset:latest
+          image: docker.io/apache/superset:4.1.0
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
             - |
+              pip install psycopg2-binary sqlalchemy-trino trino && \
               superset db upgrade && \
               (superset fab list-users | grep -q "admin" || superset fab create-admin \
                 --username admin \
@@ -67,13 +66,13 @@ spec:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             periodSeconds: 15
           resources:
             requests:

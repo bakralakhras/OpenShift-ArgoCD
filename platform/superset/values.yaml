@@ -1,6 +1,12 @@
 image:
-  repository: docker.io/apache/superset
+  repository: apachesuperset.docker.scarf.sh/apache/superset
   tag: "latest"
+  pullPolicy: IfNotPresent
+
+initImage:
+  repository: apache/superset
+  tag: dockerize
+  pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
@@ -17,16 +23,7 @@ secretEnv:
 envFromSecret: superset-env
 
 redis:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: bitnami/redis
-    tag: "latest"
-  master:
-    persistence:
-      enabled: true
-      storageClass: nfs-storage
-      size: 2Gi
+  enabled: false
 
 bootstrapScript: |
   #!/bin/bash
@@ -47,7 +44,7 @@ init:
     password: admin1234567890
 
 supersetWorker:
-  enabled: true
+  enabled: false
 
 supersetCeleryBeat:
   enabled: false

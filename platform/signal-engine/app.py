@@ -29,11 +29,11 @@ def compute(symbol, data):
     vol = statistics.pstdev(prices) if len(prices) > 1 else 0
 
     severity = "NORMAL"
-    if abs(deviation) > 2:
+    if abs(deviation) > 0.1:
         severity = "WATCH"
-    if abs(deviation) > 4:
+    if abs(deviation) > 0.3:
         severity = "ALERT"
-    if abs(deviation) > 6:
+    if abs(deviation) > 0.5:
         severity = "CRITICAL"
 
     return {

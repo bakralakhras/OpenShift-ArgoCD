@@ -31,7 +31,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: superset
-          image: docker.io/apache/superset:4.1.0
+          image: docker.io/apache/superset:5.0.0
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh

@@ -5,16 +5,50 @@ metadata:
   namespace: openshift-gitops
 spec:
   project: default
+  source:
+    chart: airflow
+    repoURL: https://airflow.apache.org
+    targetRevision: 1.20.0
+    helm:
+      valuesObject:
+        executor: CeleryExecutor
+
+        rbac:
+          create: true
+          createSCCRoleBinding: true
+
+        postgresql:
+          enabled: true
+
+        redis:
+          enabled: true
+
+        dags:
+          persistence:
+            enabled: false
+
+        logs:
+          persistence:
+            enabled: false
+
+        webserver:
+          service:
+            type: ClusterIP
+
+        ingress:
+          enabled: false
+
+        triggerer:
+          enabled: true
+
+        flower:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: airflow
-  source:
-    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
-    targetRevision: HEAD
-    path: platform/airflow
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true

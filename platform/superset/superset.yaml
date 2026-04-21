@@ -57,6 +57,8 @@ spec:
           env:
             - name: SUPERSET_CONFIG_PATH
               value: /app/pythonpath/superset_config.py
+            - name: SUPERSET_PORT
+              value: "8088"
             - name: TALISMAN_ENABLED
               value: "False"
             - name: PYTHONPATH

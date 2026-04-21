@@ -1,0 +1,48 @@
+image:
+  repository: docker.io/apache/superset
+  tag: "4.1.0"
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+redis:
+  enabled: true
+  master:
+    persistence:
+      enabled: true
+      storageClass: nfs-storage
+      size: 2Gi
+
+supersetNode:
+  connections:
+    db_uri: postgresql+psycopg2://hive:hive123@postgresql.postgresql.svc.cluster.local:5432/superset
+
+init:
+  adminUser:
+    username: admin
+    firstname: Admin
+    lastname: User
+    email: admin@superset.local
+    password: admin1234567890
+
+extraEnv:
+  SUPERSET_SECRET_KEY: "43db9a292d7f97562972e98bbc165ddfab858d198efae8afc87029bb988ddee9"
+
+bootstrapScript: |
+  #!/bin/bash
+  pip install psycopg2-binary trino sqlalchemy-trino
+
+supersetWorker:
+  enabled: false
+
+supersetCeleryBeat:
+  enabled: false
+
+supersetCeleryFlower:
+  enabled: false

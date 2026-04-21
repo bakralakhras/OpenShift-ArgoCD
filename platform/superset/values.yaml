@@ -18,6 +18,10 @@ envFromSecret: superset-env
 
 redis:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/redis
+    tag: "latest"
   master:
     persistence:
       enabled: true

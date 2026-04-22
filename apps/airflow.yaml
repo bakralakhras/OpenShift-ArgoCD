@@ -47,6 +47,7 @@ spec:
         logs:
           persistence:
             enabled: false
+          emptyDir: {}
 
         triggerer:
           enabled: false
@@ -54,18 +55,21 @@ spec:
         flower:
           enabled: false
 
+        scheduler:
+          extraVolumes: []
+          extraVolumeMounts: []
+
         webserver:
           service:
             type: ClusterIP
 
         ingress:
           enabled: false
-        scheduler:
-          persistence:
-            enabled: false
+
   destination:
     server: https://kubernetes.default.svc
     namespace: airflow
+
   syncPolicy:
     automated:
       prune: true

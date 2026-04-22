@@ -5,6 +5,21 @@ metadata:
   namespace: openshift-gitops
 spec:
   project: default
+
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: airflow-jwt-secret
+    - group: ""
+      kind: Secret
+      name: airflow-metadata
+    - group: batch
+      kind: Job
+      name: airflow-create-user
+    - group: batch
+      kind: Job
+      name: airflow-run-airflow-migrations
+
   source:
     chart: airflow
     repoURL: https://airflow.apache.org
@@ -47,17 +62,12 @@ spec:
         logs:
           persistence:
             enabled: false
-          emptyDirConfig: {}
 
         triggerer:
           enabled: false
 
         flower:
           enabled: false
-
-        scheduler:
-          logGroomerSidecar:
-            enabled: false
 
         webserver:
           service:

@@ -60,6 +60,9 @@ spec:
 
         ingress:
           enabled: false
+        scheduler:
+          persistence:
+            enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: airflow

@@ -11,22 +11,34 @@ spec:
     targetRevision: 1.20.0
     helm:
       valuesObject:
-        executor: CeleryExecutor
+        executor: LocalExecutor
 
         rbac:
           create: true
           createSCCRoleBinding: true
 
         postgresql:
-          enabled: true
-          primary:
-            persistence:
-              storageClass: local-storage
+          enabled: false
 
         redis:
-          enabled: true
-          persistence:
-            storageClassName: local-storage
+          enabled: false
+
+        data:
+          metadataConnection:
+            user: hive
+            pass: hive123
+            protocol: postgresql
+            host: postgresql.postgresql.svc.cluster.local
+            port: 5432
+            db: airflow
+
+        createUserJob:
+          useHelmHooks: false
+          applyCustomEnv: false
+
+        migrateDatabaseJob:
+          useHelmHooks: false
+          applyCustomEnv: false
 
         dags:
           persistence:
@@ -36,25 +48,17 @@ spec:
           persistence:
             enabled: false
 
+        triggerer:
+          enabled: false
+
+        flower:
+          enabled: false
+
         webserver:
           service:
             type: ClusterIP
 
         ingress:
-          enabled: false
-
-        triggerer:
-          enabled: true
-          persistence:
-            enabled: true
-            storageClassName: local-storage
-
-        workers:
-          persistence:
-            enabled: true
-            storageClassName: local-storage
-
-        flower:
           enabled: false
   destination:
     server: https://kubernetes.default.svc

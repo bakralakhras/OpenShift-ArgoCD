@@ -47,7 +47,7 @@ spec:
         logs:
           persistence:
             enabled: false
-          emptyDir: {}
+          emptyDirConfig: {}
 
         triggerer:
           enabled: false
@@ -56,15 +56,8 @@ spec:
           enabled: false
 
         scheduler:
-          enabled: true
-          logCleanup:
+          logGroomerSidecar:
             enabled: false
-          extraVolumeMounts:
-            - name: logs
-              mountPath: /opt/airflow/logs
-          extraVolumes:
-            - name: logs
-              emptyDir: {}
 
         webserver:
           service:

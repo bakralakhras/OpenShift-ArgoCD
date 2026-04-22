@@ -7,14 +7,18 @@ spec:
   project: default
 
   ignoreDifferences:
-    - group: batch
-      kind: Job
     - group: ""
       kind: Secret
       name: airflow-jwt-secret
     - group: ""
       kind: Secret
       name: airflow-metadata
+    - group: batch
+      kind: Job
+      name: airflow-create-user
+    - group: batch
+      kind: Job
+      name: airflow-run-airflow-migrations
 
   source:
     chart: airflow
@@ -82,4 +86,3 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ApplyOutOfSyncOnly=true

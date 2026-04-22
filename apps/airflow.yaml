@@ -47,7 +47,6 @@ spec:
         logs:
           persistence:
             enabled: false
-          emptyDir: {}
 
         triggerer:
           enabled: false
@@ -56,8 +55,7 @@ spec:
           enabled: false
 
         scheduler:
-          extraVolumes: []
-          extraVolumeMounts: []
+          volumeClaimTemplates: []
 
         webserver:
           service:

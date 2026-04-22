@@ -47,6 +47,7 @@ spec:
         logs:
           persistence:
             enabled: false
+          emptyDir: {}
 
         triggerer:
           enabled: false
@@ -55,7 +56,15 @@ spec:
           enabled: false
 
         scheduler:
-          volumeClaimTemplates: []
+          enabled: true
+          logCleanup:
+            enabled: false
+          extraVolumeMounts:
+            - name: logs
+              mountPath: /opt/airflow/logs
+          extraVolumes:
+            - name: logs
+              emptyDir: {}
 
         webserver:
           service:

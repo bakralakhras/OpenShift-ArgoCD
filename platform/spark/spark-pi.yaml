@@ -23,9 +23,9 @@ spec:
       - name: spark-workdir
         mountPath: /opt/spark/work-dir
   executor:
-    instances: 2
+    instances: 1
     cores: 1
-    memory: "1g"
+    memory: "512m"
     labels:
       app: spark-pi
     volumeMounts:

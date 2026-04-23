@@ -19,9 +19,18 @@ spec:
     memory: "1g"
     labels:
       app: spark-pi
+    volumeMounts:
+      - name: spark-workdir
+        mountPath: /opt/spark/work-dir
   executor:
     instances: 2
     cores: 1
     memory: "1g"
     labels:
       app: spark-pi
+    volumeMounts:
+      - name: spark-workdir
+        mountPath: /opt/spark/work-dir
+  volumes:
+    - name: spark-workdir
+      emptyDir: {}

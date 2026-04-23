@@ -1,0 +1,27 @@
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: spark-pi
+  namespace: spark
+spec:
+  type: Scala
+  mode: cluster
+  sparkVersion: "4.0.1"
+  image: "docker.io/library/spark:4.0.1"
+  imagePullPolicy: IfNotPresent
+  mainClass: org.apache.spark.examples.SparkPi
+  mainApplicationFile: "local:///opt/spark/examples/jars/spark-examples.jar"
+  restartPolicy:
+    type: Never
+  driver:
+    serviceAccount: spark
+    cores: 1
+    memory: "1g"
+    labels:
+      app: spark-pi
+  executor:
+    instances: 2
+    cores: 1
+    memory: "1g"
+    labels:
+      app: spark-pi

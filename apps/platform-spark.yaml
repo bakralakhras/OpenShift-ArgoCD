@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-spark
+  namespace: openshift-gitops
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: spark
+  source:
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+    targetRevision: main
+    path: platform/spark
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

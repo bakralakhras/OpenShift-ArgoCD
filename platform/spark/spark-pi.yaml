@@ -6,7 +6,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  sparkVersion: "4.0.1"
+  sparkVersion: "4.0.0"
   image: "docker.io/library/spark:4.0.1"
   imagePullPolicy: IfNotPresent
   mainClass: org.apache.spark.examples.SparkPi
@@ -19,6 +19,8 @@ spec:
     memory: "512m"
     labels:
       app: spark-pi
+    nodeSelector:
+      kubernetes.io/hostname: worker2.ocp4.infrahub.com
     volumeMounts:
       - name: spark-workdir
         mountPath: /opt/spark/work-dir
@@ -28,6 +30,8 @@ spec:
     memory: "256m"
     labels:
       app: spark-pi
+    nodeSelector:
+      kubernetes.io/hostname: worker2.ocp4.infrahub.com
     volumeMounts:
       - name: spark-workdir
         mountPath: /opt/spark/work-dir

@@ -16,6 +16,7 @@ spec:
         replicas: 1
         persistence:
           storageClass: local-storage
+          size: 10Gi
         mode: standalone
         resources:
           requests:

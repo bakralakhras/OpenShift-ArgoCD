@@ -1,0 +1,41 @@
+{
+  "type": "record",
+  "name": "FraudScore",
+  "namespace": "com.fraud.platform.v1",
+  "doc": "Rule-based fraud score output from Spark Job 3. Score 0-100. Each rule contributes a weighted component.",
+  "fields": [
+    {"name": "ingestion_id",      "type": "string"},
+    {"name": "scored_at",         "type": "string"},
+    {"name": "transaction_date",  "type": "string"},
+    {"name": "TransactionID",     "type": "int"},
+    {"name": "uid",               "type": ["null", "string"], "default": null},
+    {"name": "TransactionAmt",    "type": "double"},
+    {"name": "ProductCD",         "type": "string"},
+    {"name": "card4",             "type": ["null", "string"], "default": null},
+    {"name": "card6",             "type": ["null", "string"], "default": null},
+    {"name": "P_emaildomain",     "type": ["null", "string"], "default": null},
+    {"name": "transaction_hour",  "type": "int"},
+    {"name": "has_identity",      "type": "boolean"},
+    {"name": "DeviceType",        "type": ["null", "string"], "default": null},
+
+    {"name": "fraud_score",       "type": "double",  "doc": "Composite score 0-100"},
+    {"name": "model_version",     "type": "string",  "doc": "Rule set version e.g. rules-v1.0"},
+
+    {"name": "rule_high_amount_new_uid",     "type": "double", "default": 0.0, "doc": "Score contribution 0-100"},
+    {"name": "rule_anonymous_email_amount",  "type": "double", "default": 0.0},
+    {"name": "rule_product_h_cnp",           "type": "double", "default": 0.0, "doc": "ProductCD=H card-not-present proxy"},
+    {"name": "rule_velocity_breach",         "type": "double", "default": 0.0, "doc": "spend_1hr > 3x spend_24hr/24"},
+    {"name": "rule_night_foreign_email",     "type": "double", "default": 0.0, "doc": "hour_risk=HIGH + foreign domain"},
+    {"name": "rule_m_mismatch",              "type": "double", "default": 0.0, "doc": "M1-M9 flag pattern mismatch"},
+    {"name": "rule_c13_spike",               "type": "double", "default": 0.0, "doc": "C13 above threshold"},
+    {"name": "rule_v258_v257_threshold",     "type": "double", "default": 0.0, "doc": "Top Kaggle features threshold breach"},
+
+    {"name": "rules_triggered",   "type": {"type": "array", "items": "string"}, "default": [], "doc": "List of rule names that fired"},
+
+    {"name": "spend_1hr",         "type": ["null", "double"], "default": null},
+    {"name": "txn_count_1hr",     "type": ["null", "int"],    "default": null},
+    {"name": "velocity_flag",     "type": "boolean",          "default": false},
+
+    {"name": "isFraud",           "type": ["null", "int"],    "default": null, "doc": "Ground truth — populated for audit"}
+  ]
+}

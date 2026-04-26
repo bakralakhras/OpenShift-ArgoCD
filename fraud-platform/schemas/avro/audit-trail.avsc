@@ -1,0 +1,30 @@
+{
+  "type": "record",
+  "name": "AuditTrailEvent",
+  "namespace": "com.fraud.platform.v1",
+  "doc": "Full event sourcing record. Every state transition logged. Contains ground truth isFraud for model training in Phase 4 DAG 3.",
+  "fields": [
+    {"name": "audit_id",          "type": "string",  "doc": "UUID for this audit event"},
+    {"name": "event_type",        "type": {
+      "type": "enum",
+      "name": "AuditEventType",
+      "symbols": ["RECEIVED", "VALIDATED", "ENRICHED", "SCORED", "DECIDED"]
+    }},
+    {"name": "event_timestamp",   "type": "string"},
+    {"name": "transaction_date",  "type": "string"},
+    {"name": "TransactionID",     "type": "int"},
+    {"name": "uid",               "type": ["null", "string"], "default": null},
+    {"name": "TransactionAmt",    "type": "double"},
+    {"name": "ProductCD",         "type": "string"},
+
+    {"name": "fraud_score",       "type": ["null", "double"], "default": null},
+    {"name": "decision",          "type": ["null", "string"], "default": null},
+    {"name": "rules_triggered",   "type": {"type": "array", "items": "string"}, "default": []},
+    {"name": "model_version",     "type": ["null", "string"], "default": null},
+
+    {"name": "isFraud",           "type": ["null", "int"],    "default": null, "doc": "IEEE-CIS ground truth — used for offline model evaluation"},
+
+    {"name": "pipeline_latency_ms", "type": ["null", "long"], "default": null, "doc": "ms from RECEIVED to DECIDED"},
+    {"name": "ingestion_id",      "type": "string"}
+  ]
+}

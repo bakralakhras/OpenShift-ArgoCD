@@ -1,0 +1,42 @@
+{
+  "type": "record",
+  "name": "FraudDecision",
+  "namespace": "com.fraud.platform.v1",
+  "doc": "Final fraud decision from Spark Job 4. APPROVE/REVIEW/BLOCK with full score breakdown. Consumed by Signal Engine.",
+  "fields": [
+    {"name": "ingestion_id",      "type": "string"},
+    {"name": "decided_at",        "type": "string"},
+    {"name": "transaction_date",  "type": "string"},
+    {"name": "TransactionID",     "type": "int"},
+    {"name": "uid",               "type": ["null", "string"], "default": null},
+    {"name": "TransactionAmt",    "type": "double"},
+    {"name": "ProductCD",         "type": "string"},
+    {"name": "card4",             "type": ["null", "string"], "default": null},
+    {"name": "card6",             "type": ["null", "string"], "default": null},
+    {"name": "P_emaildomain",     "type": ["null", "string"], "default": null},
+    {"name": "transaction_hour",  "type": "int"},
+
+    {"name": "fraud_score",       "type": "double",  "doc": "Final score 0-100"},
+    {"name": "decision",          "type": {
+      "type": "enum",
+      "name": "DecisionType",
+      "symbols": ["APPROVE", "REVIEW", "BLOCK"],
+      "doc": "APPROVE: 0-35, REVIEW: 35-65, BLOCK: 65-100"
+    }},
+    {"name": "decision_reason",   "type": "string",  "doc": "Human-readable reason string"},
+    {"name": "rules_triggered",   "type": {"type": "array", "items": "string"}, "default": []},
+    {"name": "confidence",        "type": "double",  "doc": "0-1 confidence in decision"},
+    {"name": "model_version",     "type": "string"},
+
+    {"name": "score_high_amount_new_uid",    "type": "double", "default": 0.0},
+    {"name": "score_anonymous_email_amount", "type": "double", "default": 0.0},
+    {"name": "score_product_h_cnp",          "type": "double", "default": 0.0},
+    {"name": "score_velocity_breach",        "type": "double", "default": 0.0},
+    {"name": "score_night_foreign_email",    "type": "double", "default": 0.0},
+    {"name": "score_m_mismatch",             "type": "double", "default": 0.0},
+    {"name": "score_c13_spike",              "type": "double", "default": 0.0},
+    {"name": "score_v258_v257_threshold",    "type": "double", "default": 0.0},
+
+    {"name": "isFraud",           "type": ["null", "int"], "default": null, "doc": "Ground truth label for model evaluation"}
+  ]
+}

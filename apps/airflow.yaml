@@ -9,19 +9,30 @@ spec:
     - group: ""
       kind: Secret
       name: airflow-jwt-secret
+      jsonPointers:
+        - /data
     - group: ""
       kind: Secret
       name: airflow-metadata
+      jsonPointers:
+        - /data
+    - group: ""
+      kind: Secret
+      name: airflow-api-secret-key
+      jsonPointers:
+        - /data
     - group: batch
       kind: Job
       name: airflow-create-user
       jsonPointers:
-        - /spec/template/spec/containers
+        - /spec
+        - /status
     - group: batch
       kind: Job
       name: airflow-run-airflow-migrations
       jsonPointers:
-        - /spec/template/spec/containers
+        - /spec
+        - /status
   source:
     chart: airflow
     repoURL: https://airflow.apache.org

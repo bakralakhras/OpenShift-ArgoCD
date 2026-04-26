@@ -15,9 +15,13 @@ spec:
     - group: batch
       kind: Job
       name: airflow-create-user
+      jsonPointers:
+        - /spec/template/spec/containers
     - group: batch
       kind: Job
       name: airflow-run-airflow-migrations
+      jsonPointers:
+        - /spec/template/spec/containers
   source:
     chart: airflow
     repoURL: https://airflow.apache.org
@@ -66,7 +70,7 @@ spec:
     namespace: airflow
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       selfHeal: true
     syncOptions:
       - CreateNamespace=true

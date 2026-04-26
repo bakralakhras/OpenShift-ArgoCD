@@ -43,8 +43,8 @@ This repository contains the complete infrastructure-as-code for a **sovereign d
 ---
 
 ## Architecture
-![Sovereign Data Platform Architecture](Arch.png)
-```
+
+![Sovereign Data Platform Architecture](Arch.PNG)
 
 ---
 

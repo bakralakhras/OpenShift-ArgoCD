@@ -1,20 +1,19 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: trino
-  namespace: trino
+  name: minio
+  namespace: minio
   labels:
-    app: trino
+    openshift.io/cluster-monitoring: "true"
 spec:
   selector:
     matchLabels:
-      app: trino
+      app: minio
+      release: minio
   endpoints:
     - port: http
-      path: /v1/info
+      path: /minio/v2/metrics/cluster
       interval: 30s
-      headers:
-        X-Trino-User: admin
   namespaceSelector:
     matchNames:
-      - trino
+      - minio

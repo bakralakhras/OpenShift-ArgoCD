@@ -25,25 +25,23 @@ spec:
             - name: http
               containerPort: 8080
           env:
-            - name: QUARKUS_PROFILE
-              value: prod
-            - name: REGISTRY_DATASOURCE_URL
+            - name: APICURIO_STORAGE_KIND
+              value: sql
+            - name: APICURIO_STORAGE_SQL_KIND
+              value: postgresql
+            - name: QUARKUS_DATASOURCE_JDBC_URL
               value: jdbc:postgresql://schema-registry-postgres.schema-registry.svc.cluster.local:5432/schema_registry
-            - name: REGISTRY_DATASOURCE_USERNAME
+            - name: QUARKUS_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: schema-registry-postgres
                   key: POSTGRESQL_USERNAME
-            - name: REGISTRY_DATASOURCE_PASSWORD
+            - name: QUARKUS_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: schema-registry-postgres
                   key: POSTGRESQL_PASSWORD
-            - name: REGISTRY_STORAGE_KIND
-              value: sql
-            - name: REGISTRY_SQL_INIT
-              value: "true"
-            - name: REGISTRY_UI_FEATURES_READONLY
+            - name: APICURIO_UI_FEATURES_READ_ONLY
               value: "false"
           resources:
             requests:

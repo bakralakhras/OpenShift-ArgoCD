@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: schema-registry
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+    targetRevision: main
+    path: platform/schema-registry
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: schema-registry
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

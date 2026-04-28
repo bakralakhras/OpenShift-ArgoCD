@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: schema-registry-postgres
+  namespace: schema-registry
+  labels:
+    app.kubernetes.io/name: schema-registry-postgres
+    app.kubernetes.io/part-of: sovereign-data-platform
+type: Opaque
+stringData:
+  POSTGRESQL_USERNAME: schema_registry
+  POSTGRESQL_PASSWORD: schema_registry123
+  POSTGRESQL_DATABASE: schema_registry
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: schema-registry-postgres-data
+  namespace: schema-registry
+  labels:
+    app.kubernetes.io/name: schema-registry-postgres
+    app.kubernetes.io/part-of: sovereign-data-platform
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs-storage
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry-postgres
+  namespace: schema-registry
+  labels:
+    app.kubernetes.io/name: schema-registry-postgres
+    app.kubernetes.io/part-of: sovereign-data-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: schema-registry-postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: schema-registry-postgres
+        app.kubernetes.io/part-of: sovereign-data-platform
+    spec:
+      containers:
+        - name: postgresql
+          image: docker.io/bitnami/postgresql:16.3.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: schema-registry-postgres
+          env:
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/postgresql
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - pg_isready -U "$POSTGRESQL_USERNAME" -d "$POSTGRESQL_DATABASE" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - pg_isready -U "$POSTGRESQL_USERNAME" -d "$POSTGRESQL_DATABASE" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: schema-registry-postgres-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-postgres
+  namespace: schema-registry
+  labels:
+    app.kubernetes.io/name: schema-registry-postgres
+    app.kubernetes.io/part-of: sovereign-data-platform
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: schema-registry-postgres
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql

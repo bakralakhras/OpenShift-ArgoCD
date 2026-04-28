@@ -30,12 +30,15 @@ spec:
             - name: APICURIO_STORAGE_SQL_KIND
               value: postgresql
 
+            - name: QUARKUS_DATASOURCE_NAME
+              value: default
             - name: QUARKUS_DATASOURCE_DB_KIND
               value: postgresql
             - name: QUARKUS_DATASOURCE_JDBC
               value: "true"
             - name: QUARKUS_DATASOURCE_REACTIVE
               value: "false"
+
             - name: QUARKUS_DATASOURCE_JDBC_URL
               value: jdbc:postgresql://schema-registry-postgres.schema-registry.svc.cluster.local:5432/schema_registry
             - name: QUARKUS_DATASOURCE_USERNAME

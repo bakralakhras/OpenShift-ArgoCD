@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: apicurio-registry
-          image: quay.io/apicurio/apicurio-registry:2.6.5.Final
+          image: quay.io/apicurio/apicurio-registry:3.0.8
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

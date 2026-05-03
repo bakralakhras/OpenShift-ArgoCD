@@ -12,6 +12,18 @@ spec:
       admin_password: admin1234567890
     auth:
       disable_login_form: "false"
+    auth.generic_oauth:
+      enabled: "true"
+      name: Keycloak
+      allow_sign_up: "true"
+      client_id: grafana
+      client_secret: Sklul6xWSSkt6hyXe2dNvPzCNeBHulFH
+      scopes: openid email profile
+      auth_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/auth
+      token_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/token
+      api_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/userinfo
+      tls_skip_verify_insecure: "true"
+      role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || 'Viewer'"
     log:
       mode: console
   deployment:

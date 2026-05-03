@@ -7,6 +7,8 @@ metadata:
     dashboards: grafana
 spec:
   config:
+    server:
+      root_url: https://grafana-monitoring.apps.ocp4.infrahub.com
     security:
       admin_user: admin
       admin_password: admin1234567890

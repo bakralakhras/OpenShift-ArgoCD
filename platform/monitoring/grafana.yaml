@@ -22,8 +22,8 @@ spec:
       client_secret: Sklul6xWSSkt6hyXe2dNvPzCNeBHulFH
       scopes: openid email profile
       auth_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/auth
-      token_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/token
-      api_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/userinfo
+      token_url: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/infrahub/protocol/openid-connect/token
+      api_url: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/infrahub/protocol/openid-connect/userinfo
       tls_skip_verify_insecure: "true"
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || 'Viewer'"
     log:

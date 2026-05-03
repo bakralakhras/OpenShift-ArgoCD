@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: apicurio-registry
-          image: quay.io/apicurio/apicurio-registry:3.0.8
+          image: docker.io/apicurio/apicurio-registry:3.2.3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -29,33 +29,18 @@ spec:
               value: sql
             - name: APICURIO_STORAGE_SQL_KIND
               value: postgresql
-
-            - name: QUARKUS_DATASOURCE_NAME
-              value: default
-            - name: QUARKUS_DATASOURCE_DB_KIND
-              value: postgresql
-            - name: QUARKUS_DATASOURCE_JDBC
-              value: "true"
-            - name: QUARKUS_DATASOURCE_REACTIVE
-              value: "false"
-
-            - name: QUARKUS_DATASOURCE_JDBC_URL
+            - name: APICURIO_DATASOURCE_URL
               value: jdbc:postgresql://schema-registry-postgres.schema-registry.svc.cluster.local:5432/schema_registry
-            - name: QUARKUS_DATASOURCE_USERNAME
+            - name: APICURIO_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: schema-registry-postgres
                   key: POSTGRESQL_USERNAME
-            - name: QUARKUS_DATASOURCE_PASSWORD
+            - name: APICURIO_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: schema-registry-postgres
                   key: POSTGRESQL_PASSWORD
-
-            - name: QUARKUS_PROFILE
-              value: prod
-            - name: APICURIO_UI_FEATURES_READ_ONLY
-              value: "false"
           resources:
             requests:
               cpu: 100m

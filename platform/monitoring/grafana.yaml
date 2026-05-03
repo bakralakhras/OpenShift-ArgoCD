@@ -19,7 +19,7 @@ spec:
       name: Keycloak
       allow_sign_up: "true"
       client_id: grafana
-      client_secret: Sklul6xWSSkt6hyXe2dNvPzCNeBHulFH
+      client_secret: zCK9pIZmQHDy84Shkg3s8RfELS9aLNUn
       scopes: openid email profile
       auth_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/auth
       token_url: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/infrahub/protocol/openid-connect/token

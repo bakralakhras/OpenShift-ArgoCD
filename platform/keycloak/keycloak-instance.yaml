@@ -1,0 +1,39 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  instances: 1
+  hostname:
+    hostname: keycloak.apps.ocp4.infrahub.com
+  db:
+    vendor: postgres
+    host: postgresql.postgresql.svc.cluster.local
+    port: 5432
+    database: keycloak_db
+    usernameSecret:
+      name: keycloak-db-secret
+      key: username
+    passwordSecret:
+      name: keycloak-db-secret
+      key: password
+  bootstrapAdminUsername:
+    secret:
+      name: keycloak-admin-secret
+      key: username
+  bootstrapAdminPassword:
+    secret:
+      name: keycloak-admin-secret
+      key: password
+  http:
+    httpEnabled: true
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"

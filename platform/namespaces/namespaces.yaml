@@ -85,3 +85,11 @@ metadata:
   labels:
     project: sovereign-data-platform
     argocd.argoproj.io/managed-by: openshift-gitops
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+  labels:
+    project: sovereign-data-platform
+    argocd.argoproj.io/managed-by: openshift-gitops

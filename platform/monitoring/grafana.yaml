@@ -14,3 +14,20 @@ spec:
       disable_login_form: "false"
     log:
       mode: console
+  deployment:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: worker2.ocp4.infrahub.com
+          containers:
+            - name: grafana
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                  ephemeral-storage: 200Mi
+                limits:
+                  cpu: 200m
+                  memory: 256Mi
+                  ephemeral-storage: 500Mi

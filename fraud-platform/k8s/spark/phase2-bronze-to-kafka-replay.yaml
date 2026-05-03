@@ -1,0 +1,64 @@
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: phase2-bronze-to-kafka-replay
+  namespace: spark
+spec:
+  type: Python
+  pythonVersion: "3"
+  mode: cluster
+  image: "image-registry.openshift-image-registry.svc:5000/spark/fraud-spark:latest"
+  imagePullPolicy: Always
+  mainApplicationFile: "local:///opt/spark/jobs/phase2/bronze_to_kafka_replay.py"
+  sparkVersion: "3.5.0"
+  restartPolicy:
+    type: Never
+
+  deps:
+    jars:
+      - "local:///opt/spark/jars/hadoop-aws-3.3.4.jar"
+      - "local:///opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar"
+      - "local:///opt/spark/jars/iceberg-spark-runtime-3.5_2.12-1.6.1.jar"
+      - "local:///opt/spark/jars/spark-sql-kafka-0-10_2.12-3.5.0.jar"
+      - "local:///opt/spark/jars/spark-token-provider-kafka-0-10_2.12-3.5.0.jar"
+      - "local:///opt/spark/jars/kafka-clients-3.4.1.jar"
+      - "local:///opt/spark/jars/commons-pool2-2.11.1.jar"
+
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "2g"
+    labels:
+      version: "3.5.0"
+    serviceAccount: spark
+    tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+
+  executor:
+    instances: 2
+    cores: 1
+    coreLimit: "1200m"
+    memory: "2g"
+    labels:
+      version: "3.5.0"
+    tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+        effect: NoSchedule
+
+  sparkConf:
+    spark.hadoop.fs.s3a.endpoint: "http://minio.minio.svc.cluster.local:9000"
+    spark.hadoop.fs.s3a.path.style.access: "true"
+    spark.hadoop.fs.s3a.connection.ssl.enabled: "false"
+    spark.hadoop.fs.s3a.access.key: "admin"
+    spark.hadoop.fs.s3a.secret.key: "minio1234"
+    spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
+    spark.hadoop.fs.s3a.aws.credentials.provider: "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider"
+
+    spark.sql.shuffle.partitions: "12"
+    spark.default.parallelism: "12"

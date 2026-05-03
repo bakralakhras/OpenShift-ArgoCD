@@ -26,6 +26,13 @@ spec:
           volumeMounts:
             - name: aux-jars
               mountPath: /aux-jars
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
       containers:
         - name: hive-metastore
           image: apache/hive:standalone-metastore-4.1.0
@@ -36,6 +43,15 @@ spec:
               value: postgres
             - name: METASTORE_AUX_JARS_PATH
               value: /aux-jars
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xms512m -Xmx1536m"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 768Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
           volumeMounts:
             - name: config
               mountPath: /opt/hive/conf/metastore-site.xml

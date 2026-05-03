@@ -32,6 +32,7 @@ data:
     s3.path-style-access=true
     s3.region=us-east-1
     iceberg.file-format=PARQUET
+      iceberg.register-table-procedure.enabled=true
   hive.properties: |
     connector.name=hive
     hive.metastore.uri=thrift://hive-metastore.lakehouse.svc.cluster.local:9083

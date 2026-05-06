@@ -1,0 +1,4 @@
+resources:
+  - cephcluster.yaml
+  - blockpool.yaml
+  - filesystem.yaml

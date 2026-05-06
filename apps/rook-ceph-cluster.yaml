@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-cluster
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+    targetRevision: main
+    path: platform/rook-ceph-cluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rook-ceph
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

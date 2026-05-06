@@ -66,7 +66,9 @@ spec:
             enabled: false
         logs:
           persistence:
-            enabled: false
+            enabled: true
+            storageClassName: rook-cephfs
+            size: 100Gi
         triggerer:
           enabled: false
         flower:
@@ -86,3 +88,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
+

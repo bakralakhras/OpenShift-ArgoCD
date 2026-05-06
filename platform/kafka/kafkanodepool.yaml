@@ -13,4 +13,4 @@ spec:
   storage:
     type: persistent-claim
     size: 10Gi
-    class: nfs-storage
+    class: rook-ceph-block

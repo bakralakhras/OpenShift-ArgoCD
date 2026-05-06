@@ -9,10 +9,10 @@ spec:
   dataDirHostPath: /var/lib/rook
   mon:
     count: 3
-    allowMultiplePerNode: false
+    allowMultiplePerNode: true
   mgr:
     count: 2
-    allowMultiplePerNode: false
+    allowMultiplePerNode: true
   dashboard:
     enabled: true
     ssl: false

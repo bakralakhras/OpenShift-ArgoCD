@@ -25,8 +25,8 @@ spec:
       - "local:///opt/spark/jars/spark-avro_2.12-3.5.0.jar"
   driver:
     cores: 1
-    coreLimit: "1200m"
-    memory: "2g"
+    coreLimit: "500m"
+    memory: "1g"
     labels:
       version: "3.5.0"
     serviceAccount: spark
@@ -44,8 +44,8 @@ spec:
   executor:
     instances: 2
     cores: 1
-    coreLimit: "1200m"
-    memory: "2g"
+    coreLimit: "500m"
+    memory: "1g"
     labels:
       version: "3.5.0"
     affinity:

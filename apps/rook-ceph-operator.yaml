@@ -6,13 +6,27 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
-    targetRevision: main
-    path: platform/rook-ceph-operator
+    repoURL: https://charts.rook.io/release
+    chart: rook-ceph
+    targetRevision: v1.17.8
+    helm:
+      values: |
+        crds:
+          enabled: true
+
+        csi:
+          enableRbdDriver: true
+          enableCephfsDriver: true
+          enableNfsDriver: false
+
+        enableDiscoveryDaemon: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: openshift-storage
+    namespace: rook-ceph
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

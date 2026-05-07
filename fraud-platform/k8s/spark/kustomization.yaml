@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - phase3-job1-validation.yaml
   - phase3-job2-enrichment.yaml
+  - phase3-job3-scoring.yaml

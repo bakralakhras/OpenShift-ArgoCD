@@ -1,0 +1,79 @@
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: phase3-job3-scoring
+  namespace: spark
+spec:
+  type: Python
+  pythonVersion: "3"
+  mode: cluster
+  image: "image-registry.openshift-image-registry.svc:5000/spark/fraud-spark-phase3:latest"
+  imagePullPolicy: Always
+  mainApplicationFile: "local:///opt/spark/jobs/phase3/job3_scoring.py"
+  sparkVersion: "3.5.0"
+  restartPolicy:
+    type: Never
+  deps:
+    jars:
+      - "local:///opt/spark/jars/hadoop-aws-3.3.4.jar"
+      - "local:///opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar"
+      - "local:///opt/spark/jars/iceberg-spark-runtime-3.5_2.12-1.6.1.jar"
+      - "local:///opt/spark/jars/spark-sql-kafka-0-10_2.12-3.5.0.jar"
+      - "local:///opt/spark/jars/spark-token-provider-kafka-0-10_2.12-3.5.0.jar"
+      - "local:///opt/spark/jars/kafka-clients-3.4.1.jar"
+      - "local:///opt/spark/jars/commons-pool2-2.11.1.jar"
+      - "local:///opt/spark/jars/spark-avro_2.12-3.5.0.jar"
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "1024m"
+    labels:
+      version: "3.5.0"
+      phase: "3"
+      job: "scoring"
+    serviceAccount: spark
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node-role.kubernetes.io/worker
+                  operator: Exists
+    tolerations:
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+        effect: NoSchedule
+  executor:
+    instances: 1
+    cores: 1
+    coreLimit: "1200m"
+    memory: "768m"
+    labels:
+      version: "3.5.0"
+      phase: "3"
+      job: "scoring"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node-role.kubernetes.io/worker
+                  operator: Exists
+    tolerations:
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+        effect: NoSchedule
+  sparkConf:
+    spark.hadoop.fs.s3a.endpoint: "http://minio.minio.svc.cluster.local:9000"
+    spark.hadoop.fs.s3a.path.style.access: "true"
+    spark.hadoop.fs.s3a.connection.ssl.enabled: "false"
+    spark.hadoop.fs.s3a.access.key: "admin"
+    spark.hadoop.fs.s3a.secret.key: "minio1234"
+    spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
+    spark.hadoop.fs.s3a.aws.credentials.provider: "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider"
+    spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version: "2"
+    spark.sql.shuffle.partitions: "4"
+    spark.default.parallelism: "4"
+    spark.streaming.stopGracefullyOnShutdown: "true"
+    spark.sql.streaming.kafka.useDeprecatedOffsetFetching: "false"
+    spark.kubernetes.executor.request.cores: "500m"

@@ -39,16 +39,6 @@ spec:
             - matchExpressions:
                 - key: node-role.kubernetes.io/worker
                   operator: Exists
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - worker4.ocp4.infrahub.com
-                    - worker3.ocp4.infrahub.com
-                    - worker2.ocp4.infrahub.com
     tolerations:
       - key: node.kubernetes.io/disk-pressure
         operator: Exists
@@ -57,7 +47,7 @@ spec:
     instances: 1
     cores: 1
     coreLimit: "1200m"
-    memory: "1024m"
+    memory: "768m"
     labels:
       version: "3.5.0"
       phase: "3"
@@ -69,16 +59,6 @@ spec:
             - matchExpressions:
                 - key: node-role.kubernetes.io/worker
                   operator: Exists
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - worker4.ocp4.infrahub.com
-                    - worker3.ocp4.infrahub.com
-                    - worker2.ocp4.infrahub.com
     tolerations:
       - key: node.kubernetes.io/disk-pressure
         operator: Exists
@@ -96,3 +76,4 @@ spec:
     spark.default.parallelism: "4"
     spark.streaming.stopGracefullyOnShutdown: "true"
     spark.sql.streaming.kafka.useDeprecatedOffsetFetching: "false"
+    spark.kubernetes.executor.request.cores: "500m"

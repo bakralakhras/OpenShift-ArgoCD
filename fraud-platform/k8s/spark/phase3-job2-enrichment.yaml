@@ -1,7 +1,7 @@
 apiVersion: sparkoperator.k8s.io/v1beta2
 kind: SparkApplication
 metadata:
-  name: phase3-job1-validation
+  name: phase3-job2-enrichment
   namespace: spark
 spec:
   type: Python
@@ -9,7 +9,7 @@ spec:
   mode: cluster
   image: "image-registry.openshift-image-registry.svc:5000/spark/fraud-spark-phase3:latest"
   imagePullPolicy: Always
-  mainApplicationFile: "local:///opt/spark/jobs/phase3/job1_validation.py"
+  mainApplicationFile: "local:///opt/spark/jobs/phase3/job2_enrichment.py"
   sparkVersion: "3.5.0"
   restartPolicy:
     type: Never
@@ -30,7 +30,7 @@ spec:
     labels:
       version: "3.5.0"
       phase: "3"
-      job: "validation"
+      job: "enrichment"
     serviceAccount: spark
     affinity:
       nodeAffinity:
@@ -61,7 +61,7 @@ spec:
     labels:
       version: "3.5.0"
       phase: "3"
-      job: "validation"
+      job: "enrichment"
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:

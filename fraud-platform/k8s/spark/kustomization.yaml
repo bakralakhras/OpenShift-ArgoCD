@@ -1,6 +1,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - phase2-bronze-bootstrap.yaml
-  - phase2-bronze-to-kafka-replay.yaml
   - phase3-job1-validation.yaml

@@ -64,6 +64,17 @@ spec:
         dags:
           persistence:
             enabled: false
+          gitSync:
+            enabled: true
+            repo: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+            branch: main
+            rev: HEAD
+            depth: 1
+            maxFailures: 3
+            subPath: fraud-platform/dags
+            wait: 60
+            containerName: git-sync
+            uid: 65533
         logs:
           persistence:
             enabled: true
@@ -88,4 +99,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-

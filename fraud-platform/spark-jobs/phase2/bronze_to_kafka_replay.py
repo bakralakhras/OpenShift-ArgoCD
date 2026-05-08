@@ -1,11 +1,13 @@
 import io
 import json
 import struct
+import uuid
 import requests
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, concat, coalesce, lit, udf
-from pyspark.sql.types import BinaryType
 import fastavro
+from datetime import datetime
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, concat, coalesce, lit
+from pyspark.sql.types import StructType, StructField, BinaryType
 
 SCHEMA_REGISTRY_URL = "http://apicurio-registry.schema-registry.svc:8080/apis/ccompat/v7"
 SUBJECT = "transactions-raw-value"
@@ -13,26 +15,10 @@ BOOTSTRAP_SERVERS = "lakehouse-kafka-kafka-bootstrap.kafka.svc:9092"
 SOURCE_TABLE = "hadoop_cat.warehouse_bronze.transactions"
 TARGET_TOPIC = "transactions-raw"
 
-def get_schema_id():
-    resp = requests.get(f"{SCHEMA_REGISTRY_URL}/subjects/{SUBJECT}/versions/latest")
-    resp.raise_for_status()
-    return resp.json()["id"]
-
-def get_schema():
-    resp = requests.get(f"{SCHEMA_REGISTRY_URL}/subjects/{SUBJECT}/versions/latest")
-    resp.raise_for_status()
-    return json.loads(resp.json()["schema"])
-
-schema_id = get_schema_id()
-parsed_schema = fastavro.parse_schema(get_schema())
-
-def serialize_avro(row_dict):
-    """Serialize a row dict to Confluent wire-format Avro bytes."""
-    buf = io.BytesIO()
-    buf.write(b'\x00')
-    buf.write(struct.pack('>I', schema_id))
-    fastavro.schemaless_writer(buf, parsed_schema, row_dict)
-    return buf.getvalue()
+resp = requests.get(f"{SCHEMA_REGISTRY_URL}/subjects/{SUBJECT}/versions/latest")
+resp.raise_for_status()
+SCHEMA_ID = resp.json()["id"]
+PARSED_SCHEMA = fastavro.parse_schema(json.loads(resp.json()["schema"]))
 
 spark = (
     SparkSession.builder
@@ -43,10 +29,12 @@ spark = (
     .config("spark.sql.catalog.hadoop_cat.warehouse", "s3a://warehouse/iceberg")
     .getOrCreate()
 )
+
 spark.sparkContext.setLogLevel("WARN")
 
 print(f"Reading Bronze table: {SOURCE_TABLE}")
 bronze_df = spark.table(SOURCE_TABLE)
+
 count = bronze_df.count()
 print(f"Bronze source rows: {count}")
 
@@ -66,50 +54,172 @@ replay_df = (
     .orderBy(col("TransactionDT").cast("long").asc())
 )
 
-all_cols = replay_df.columns
+schema_id_val = SCHEMA_ID
+registry_url = SCHEMA_REGISTRY_URL
+subject_val = SUBJECT
 
-def row_to_avro(row):
-    d = row.asDict()
-    # Schema expects specific types — cast to string where needed
-    clean = {}
-    for k, v in d.items():
-        if v is None:
-            clean[k] = None
-        else:
-            clean[k] = str(v) if not isinstance(v, (int, float, bool)) else v
-    return serialize_avro(clean)
 
-avro_udf = udf(row_to_avro, BinaryType())
+def normalize_null(value):
+    if value is None:
+        return None
 
-kafka_df = (
-    replay_df
-    .withColumn("value", avro_udf(col("uid")))  # placeholder — see below
-    .select(
-        col("uid").cast("string").alias("key"),
-        avro_udf(lit(None)).alias("value")
-    )
-)
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if cleaned == "" or cleaned.lower() in {"null", "none", "nan"}:
+            return None
+        return cleaned
 
-# Better: use mapPartitions for full row serialization
+    return value
+
+
+def avro_base_type(field_type):
+    if isinstance(field_type, list):
+        non_null_types = [t for t in field_type if t != "null"]
+        if non_null_types:
+            return non_null_types[0]
+        return "null"
+
+    return field_type
+
+
+def cast_for_avro(value, field_type):
+    value = normalize_null(value)
+    base_type = avro_base_type(field_type)
+
+    if value is None:
+        return None
+
+    try:
+        if base_type == "string":
+            return str(value)
+
+        if base_type == "int":
+            return int(float(value))
+
+        if base_type == "long":
+            return int(float(value))
+
+        if base_type == "double":
+            return float(value)
+
+        if base_type == "float":
+            return float(value)
+
+        if base_type == "boolean":
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, str):
+                return value.strip().lower() in {"true", "1", "yes", "y"}
+            return bool(value)
+
+        return value
+
+    except Exception:
+        return None
+
+
+def default_for_field(field):
+    field_type = field.get("type")
+
+    if isinstance(field_type, list) and "null" in field_type:
+        return None
+
+    if "default" in field:
+        return field["default"]
+
+    base_type = avro_base_type(field_type)
+
+    if base_type == "string":
+        return ""
+
+    if base_type in {"int", "long"}:
+        return 0
+
+    if base_type in {"double", "float"}:
+        return 0.0
+
+    if base_type == "boolean":
+        return False
+
+    return None
+
+
 def serialize_partition(rows):
-    for row in rows:
-        d = row.asDict()
-        clean = {k: (str(v) if v is not None and not isinstance(v, (int, float, bool)) else v) for k, v in d.items()}
-        key = clean.get("uid", "unknown").encode("utf-8")
-        value = serialize_avro(clean)
-        yield (key, value)
+    import io
+    import json
+    import struct
+    import uuid
+    import requests
+    import fastavro
+    from datetime import datetime
 
-from pyspark.sql import Row
-from pyspark.sql.types import StructType, StructField, StringType
+    resp = requests.get(f"{registry_url}/subjects/{subject_val}/versions/latest")
+    resp.raise_for_status()
+
+    schema_id = resp.json()["id"]
+    parsed_schema = fastavro.parse_schema(json.loads(resp.json()["schema"]))
+
+    for row in rows:
+        row_dict = row.asDict()
+        uid = row_dict.get("uid", "unknown") or "unknown"
+
+        avro_record = {}
+
+        for field in parsed_schema["fields"]:
+            name = field["name"]
+            field_type = field["type"]
+
+            if name == "ingestion_id":
+                avro_record[name] = str(uuid.uuid4())
+
+            elif name == "kafka_offset":
+                avro_record[name] = 0
+
+            elif name == "kafka_partition":
+                avro_record[name] = 0
+
+            elif name == "ingested_at":
+                avro_record[name] = datetime.utcnow().isoformat() + "Z"
+
+            elif name == "ingestion_date":
+                value = row_dict.get("ingestion_date")
+                avro_record[name] = str(value) if value is not None else datetime.utcnow().strftime("%Y-%m-%d")
+
+            elif name == "uid":
+                avro_record[name] = str(uid)
+
+            elif name == "event_timestamp":
+                value = row_dict.get("event_timestamp")
+                avro_record[name] = str(value) if value is not None else None
+
+            else:
+                value = row_dict.get(name)
+                casted_value = cast_for_avro(value, field_type)
+
+                if casted_value is None:
+                    avro_record[name] = default_for_field(field)
+                else:
+                    avro_record[name] = casted_value
+
+        buf = io.BytesIO()
+        buf.write(b"\x00")
+        buf.write(struct.pack(">I", schema_id))
+        fastavro.schemaless_writer(buf, parsed_schema, avro_record)
+
+        yield (str(uid).encode("utf-8"), buf.getvalue())
+
 
 rdd = replay_df.rdd.mapPartitions(serialize_partition)
-schema = StructType([
+
+out_schema = StructType([
     StructField("key", BinaryType(), True),
     StructField("value", BinaryType(), True)
 ])
-kafka_df = spark.createDataFrame(rdd, schema)
+
+kafka_df = spark.createDataFrame(rdd, out_schema)
 
 print(f"Writing {count} rows as Avro to Kafka topic: {TARGET_TOPIC}")
+
 (
     kafka_df.write
     .format("kafka")
@@ -117,5 +227,7 @@ print(f"Writing {count} rows as Avro to Kafka topic: {TARGET_TOPIC}")
     .option("topic", TARGET_TOPIC)
     .save()
 )
+
 print(f"Done. Replayed {count} rows as Avro to {TARGET_TOPIC}")
+
 spark.stop()

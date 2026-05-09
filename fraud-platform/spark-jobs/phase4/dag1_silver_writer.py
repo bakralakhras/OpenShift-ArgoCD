@@ -3,35 +3,77 @@ Phase 4 - DAG 1 Silver Writer
 Reads fraud-decisions and audit-trail Kafka topics (Confluent Avro wire format)
 and writes to Iceberg silver tables via Hadoop catalog.
 """
-import struct
 import io
+import json
 import requests
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json, schema_of_json
-from pyspark.sql.types import *
 import fastavro
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, udf
+from pyspark.sql.types import MapType, StringType
 
 KAFKA_BOOTSTRAP = "lakehouse-kafka-kafka-bootstrap.kafka.svc:9092"
 SCHEMA_REGISTRY = "http://apicurio-registry.schema-registry.svc:8080/apis/ccompat/v7"
 
-def get_schema(schema_id):
+SCHEMA_CACHE = {}
+
+def fetch_schema(schema_id):
     url = f"{SCHEMA_REGISTRY}/schemas/ids/{schema_id}"
     resp = requests.get(url, timeout=10)
     resp.raise_for_status()
-    return fastavro.parse_schema(resp.json()["schema"] if isinstance(resp.json()["schema"], dict) 
-                                  else __import__("json").loads(resp.json()["schema"]))
+    raw = resp.json()["schema"]
+    if isinstance(raw, str):
+        raw = json.loads(raw)
+    return fastavro.parse_schema(raw)
 
-def decode_avro_message(raw_bytes, schema):
-    """Decode Confluent wire format: magic byte + 4 byte schema ID + avro payload"""
+def decode_confluent_avro(raw_bytes, schema_id):
+    """
+    Confluent wire format:
+    Byte 0:    0x00 magic byte
+    Bytes 1-4: schema ID big-endian uint32
+    Bytes 5+:  Avro binary payload
+    """
     if raw_bytes is None or len(raw_bytes) < 5:
         return None
-    # Skip magic byte (0x00) and 4-byte schema ID
-    payload = raw_bytes[5:]
-    reader = io.BytesIO(payload)
-    try:
-        return fastavro.schemaless_reader(reader, schema)
-    except Exception:
+    magic = raw_bytes[0]
+    if magic != 0:
         return None
+    payload = raw_bytes[5:]
+    try:
+        schema = SCHEMA_CACHE.get(schema_id)
+        if schema is None:
+            schema = fetch_schema(schema_id)
+            SCHEMA_CACHE[schema_id] = schema
+        reader = io.BytesIO(payload)
+        record = fastavro.schemaless_reader(reader, schema)
+        return {k: str(v) if v is not None else None for k, v in record.items()}
+    except Exception as e:
+        return None
+
+def make_decoder_udf(schema_id):
+    sid = schema_id
+    registry = SCHEMA_REGISTRY
+
+    @udf(returnType=MapType(StringType(), StringType()))
+    def decoder(raw):
+        import io, json, requests, fastavro
+        if raw is None or len(raw) < 5:
+            return None
+        if raw[0] != 0:
+            return None
+        payload = bytes(raw[5:])
+        try:
+            url = f"{registry}/schemas/ids/{sid}"
+            resp = requests.get(url, timeout=10)
+            raw_schema = resp.json()["schema"]
+            if isinstance(raw_schema, str):
+                raw_schema = json.loads(raw_schema)
+            schema = fastavro.parse_schema(raw_schema)
+            reader = io.BytesIO(payload)
+            record = fastavro.schemaless_reader(reader, schema)
+            return {k: str(v) if v is not None else None for k, v in record.items()}
+        except Exception as e:
+            return None
+    return decoder
 
 def main():
     spark = SparkSession.builder \
@@ -39,10 +81,9 @@ def main():
         .getOrCreate()
 
     spark.sparkContext.setLogLevel("WARN")
-
     print("=== Phase 4 Silver Writer Starting ===")
 
-    # --- Read fraud-decisions from Kafka ---
+    # --- Read and decode fraud-decisions (schema ID 5) ---
     print("Reading fraud-decisions topic...")
     decisions_raw = spark.read \
         .format("kafka") \
@@ -50,64 +91,51 @@ def main():
         .option("subscribe", "fraud-decisions") \
         .option("startingOffsets", "earliest") \
         .option("endingOffsets", "latest") \
-        .option("maxOffsetsPerTrigger", "500000") \
         .load()
 
-    print(f"fraud-decisions raw count: {decisions_raw.count()}")
+    raw_count = decisions_raw.count()
+    print(f"fraud-decisions raw count: {raw_count}")
 
-    # Get schema for fraud-decisions (schema ID 5)
-    decisions_schema = get_schema(5)
-
-    # Decode Avro messages using UDF
-    from pyspark.sql.functions import udf
-    from pyspark.sql.types import MapType, StringType
-
-    @udf(returnType=MapType(StringType(), StringType()))
-    def decode_decision_udf(raw):
-        if raw is None:
-            return None
-        record = decode_avro_message(bytes(raw), decisions_schema)
-        if record is None:
-            return None
-        return {k: str(v) if v is not None else None for k, v in record.items()}
+    decode_decision = make_decoder_udf(5)
 
     decisions_decoded = decisions_raw.select(
-        decode_decision_udf(col("value")).alias("data")
+        decode_decision(col("value")).alias("data")
     ).filter(col("data").isNotNull())
 
-    # Build silver decisions schema
-    silver_decisions = decisions_decoded.select(
-        col("data.transaction_id").alias("transaction_id"),
-        col("data.uid").alias("uid"),
-        col("data.decision").alias("decision"),
-        col("data.fraud_score").cast("double").alias("fraud_score"),
-        col("data.is_fraud").cast("boolean").alias("is_fraud"),
-        col("data.transaction_amount").cast("double").alias("transaction_amount"),
-        col("data.product_cd").alias("product_cd"),
-        col("data.transaction_timestamp").alias("transaction_timestamp"),
-        col("data.transaction_date").alias("transaction_date"),
-        col("data.night_score").cast("double").alias("night_score"),
-        col("data.amount_score").cast("double").alias("amount_score"),
-        col("data.velocity_score").cast("double").alias("velocity_score"),
-        col("data.email_score").cast("double").alias("email_score"),
-        col("data.product_score").cast("double").alias("product_score"),
-        col("data.mismatch_score").cast("double").alias("mismatch_score"),
-        col("data.cent_score").cast("double").alias("cent_score"),
-        col("data.c13_score").cast("double").alias("c13_score"),
-    ).filter(col("transaction_id").isNotNull())
-
-    decisions_count = silver_decisions.count()
+    decisions_count = decisions_decoded.count()
     print(f"Decoded decisions count: {decisions_count}")
 
     if decisions_count > 0:
+        silver_decisions = decisions_decoded.select(
+            col("data.TransactionID").cast("integer").alias("transactionid"),
+            col("data.uid").alias("uid"),
+            col("data.TransactionAmt").cast("double").alias("transactionamt"),
+            col("data.ProductCD").alias("productcd"),
+            col("data.card4").alias("card4"),
+            col("data.card6").alias("card6"),
+            col("data.P_emaildomain").alias("p_emaildomain"),
+            col("data.transaction_hour").cast("integer").alias("transaction_hour"),
+            col("data.fraud_score").cast("double").alias("fraud_score"),
+            col("data.decision").alias("decision"),
+            col("data.decision_reason").alias("decision_reason"),
+            col("data.model_version").alias("model_version"),
+            col("data.rules_triggered").alias("rules_triggered"),
+            col("data.isFraud").cast("integer").alias("isfraud"),
+            col("data.ingestion_id").alias("ingestion_id"),
+            col("data.transaction_date").alias("transaction_date"),
+        ).filter(col("transactionid").isNotNull())
+
+        decisions_final_count = silver_decisions.count()
+        print(f"Silver decisions rows to write: {decisions_final_count}")
+
         silver_decisions.writeTo("hadoop_cat.warehouse_silver.decisions") \
             .option("merge-schema", "true") \
             .append()
-        print(f"Written {decisions_count} rows to silver.decisions")
+        print(f"Written {decisions_final_count} rows to silver.decisions")
     else:
-        print("WARNING: No decision records decoded")
+        print("ERROR: 0 records decoded from fraud-decisions")
 
-    # --- Read audit-trail from Kafka ---
+    # --- Read and decode audit-trail (schema ID 6) ---
     print("Reading audit-trail topic...")
     audit_raw = spark.read \
         .format("kafka") \
@@ -115,51 +143,40 @@ def main():
         .option("subscribe", "audit-trail") \
         .option("startingOffsets", "earliest") \
         .option("endingOffsets", "latest") \
-        .option("maxOffsetsPerTrigger", "500000") \
         .load()
 
     print(f"audit-trail raw count: {audit_raw.count()}")
 
-    # Get schema for audit-trail (schema ID 6)
-    audit_schema = get_schema(6)
-
-    @udf(returnType=MapType(StringType(), StringType()))
-    def decode_audit_udf(raw):
-        if raw is None:
-            return None
-        record = decode_avro_message(bytes(raw), audit_schema)
-        if record is None:
-            return None
-        return {k: str(v) if v is not None else None for k, v in record.items()}
+    decode_audit = make_decoder_udf(6)
 
     audit_decoded = audit_raw.select(
-        decode_audit_udf(col("value")).alias("data")
+        decode_audit(col("value")).alias("data")
     ).filter(col("data").isNotNull())
 
-    silver_transactions = audit_decoded.select(
-        col("data.transaction_id").alias("transaction_id"),
-        col("data.uid").alias("uid"),
-        col("data.transaction_amount").cast("double").alias("transaction_amount"),
-        col("data.product_cd").alias("product_cd"),
-        col("data.transaction_timestamp").alias("transaction_timestamp"),
-        col("data.transaction_date").alias("transaction_date"),
-        col("data.is_fraud").cast("boolean").alias("is_fraud"),
-        col("data.email_domain").alias("email_domain"),
-        col("data.hour_of_day").cast("integer").alias("hour_of_day"),
-        col("data.day_of_week").cast("integer").alias("day_of_week"),
-        col("data.cent_amount").cast("double").alias("cent_amount"),
-    ).filter(col("transaction_id").isNotNull())
+    audit_count = audit_decoded.count()
+    print(f"Decoded audit-trail count: {audit_count}")
 
-    transactions_count = silver_transactions.count()
-    print(f"Decoded transactions count: {transactions_count}")
+    if audit_count > 0:
+        silver_transactions = audit_decoded.select(
+            col("data.TransactionID").cast("integer").alias("transactionid"),
+            col("data.isFraud").cast("integer").alias("isfraud"),
+            col("data.TransactionAmt").cast("double").alias("transactionamt"),
+            col("data.ProductCD").alias("productcd"),
+            col("data.uid").alias("uid"),
+            col("data.transaction_date").alias("transaction_date"),
+            col("data.decided_at").alias("event_timestamp"),
+            col("data.transaction_hour").cast("integer").alias("transaction_hour"),
+        ).filter(col("transactionid").isNotNull())
 
-    if transactions_count > 0:
+        transactions_count = silver_transactions.count()
+        print(f"Silver transactions rows to write: {transactions_count}")
+
         silver_transactions.writeTo("hadoop_cat.warehouse_silver.transactions") \
             .option("merge-schema", "true") \
             .append()
         print(f"Written {transactions_count} rows to silver.transactions")
     else:
-        print("WARNING: No transaction records decoded")
+        print("ERROR: 0 records decoded from audit-trail")
 
     print("=== Phase 4 Silver Writer Complete ===")
     spark.stop()

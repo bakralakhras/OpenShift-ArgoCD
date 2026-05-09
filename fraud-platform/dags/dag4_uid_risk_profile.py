@@ -1,63 +1,41 @@
-"""
-DAG 4 — UID Risk Profile
-Builds per-user rolling risk profiles for future scoring enrichment.
-"""
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.bash import BashOperator
+from airflow.providers.standard.operators.bash import BashOperator
 
-default_args = {
-    "owner": "fraud-platform",
-    "retries": 1,
-    "retry_delay": timedelta(minutes=5),
-}
+default_args = {"owner": "fraud-platform", "retries": 1, "retry_delay": timedelta(minutes=5)}
 
-with DAG(
-    dag_id="dag4_uid_risk_profile",
-    default_args=default_args,
-    description="Build UID risk profiles from silver decisions",
-    schedule="0 3 * * *",
-    start_date=datetime(2026, 1, 1),
-    catchup=False,
-    tags=["gold", "uid", "risk"],
-) as dag:
+with DAG("dag4_uid_risk_profile", default_args=default_args,
+         schedule="0 3 * * *", start_date=datetime(2026,1,1), catchup=False,
+         tags=["gold","uid"]) as dag:
 
-    build_uid_profiles = BashOperator(
-        task_id="build_uid_risk_profiles",
-        bash_command="""
-        TRINO_POD=$(oc get pod -n trino -o jsonpath='{.items[0].metadata.name}')
-        oc exec -n trino $TRINO_POD -- trino --execute "
-        INSERT INTO iceberg.warehouse_gold.uid_risk_profile
-        SELECT
-          uid,
-          COUNT(*)                                        AS total_transactions,
-          COUNT(*) FILTER (WHERE decision = 'BLOCK')     AS blocked_count,
-          AVG(fraud_score)                                AS avg_fraud_score,
-          MAX(fraud_score)                                AS max_fraud_score,
-          MAX(CAST(transaction_date AS date))             AS last_seen_date,
-          CASE
-            WHEN AVG(fraud_score) >= 70 THEN 'HIGH'
-            WHEN AVG(fraud_score) >= 35 THEN 'MEDIUM'
-            ELSE 'LOW'
-          END                                             AS risk_tier,
-          CURRENT_TIMESTAMP                               AS updated_at
-        FROM iceberg.warehouse_silver.decisions
-        WHERE CAST(transaction_date AS date) >= CURRENT_DATE - INTERVAL '30' DAY
-        GROUP BY uid
-        " 2>/dev/null
-        echo "UID risk profile insert done"
-        """,
-    )
-
-    verify = BashOperator(
-        task_id="verify_uid_profiles",
-        bash_command="""
-        TRINO_POD=$(oc get pod -n trino -o jsonpath='{.items[0].metadata.name}')
-        oc exec -n trino $TRINO_POD -- trino --execute \
-          "SELECT risk_tier, COUNT(*) as uid_count, AVG(avg_fraud_score) as avg_score
-           FROM iceberg.warehouse_gold.uid_risk_profile
-           GROUP BY risk_tier ORDER BY avg_score DESC" 2>/dev/null
-        """,
-    )
-
-    build_uid_profiles >> verify
+    BashOperator(task_id="build_and_verify", bash_command="""
+    TRINO_POD=$(oc get pod -n trino -o jsonpath='{.items[0].metadata.name}')
+    oc exec -n trino $TRINO_POD -- trino --execute "
+    INSERT INTO iceberg.warehouse_gold.uid_risk_profile
+    SELECT
+      uid,
+      NULL                                                               AS card1,
+      NULL                                                               AS addr1,
+      COUNT(*)                                                           AS total_transactions,
+      SUM(transactionamt)                                                AS total_amount,
+      COUNT(*) FILTER (WHERE isfraud = 1)                               AS fraud_count,
+      CAST(COUNT(*) FILTER (WHERE isfraud = 1) AS double) / COUNT(*)    AS fraud_rate,
+      AVG(transactionamt)                                                AS avg_amount,
+      MAX(transactionamt)                                                AS max_amount,
+      COUNT(DISTINCT productcd)                                          AS distinct_merchants,
+      COUNT(DISTINCT p_emaildomain)                                      AS distinct_emails,
+      MAX(CAST(CURRENT_TIMESTAMP AS timestamp(6) with time zone))        AS last_seen,
+      CASE
+        WHEN AVG(fraud_score) >= 65 THEN 'HIGH'
+        WHEN AVG(fraud_score) >= 35 THEN 'MEDIUM'
+        ELSE 'LOW'
+      END                                                                AS risk_tier,
+      CURRENT_TIMESTAMP                                                  AS updated_at
+    FROM iceberg.warehouse_silver.decisions
+    WHERE uid IS NOT NULL
+    GROUP BY uid
+    " 2>/dev/null
+    echo "Done:"
+    oc exec -n trino $TRINO_POD -- trino --execute \
+      "SELECT risk_tier, count(*) FROM iceberg.warehouse_gold.uid_risk_profile GROUP BY risk_tier" 2>/dev/null
+    """)

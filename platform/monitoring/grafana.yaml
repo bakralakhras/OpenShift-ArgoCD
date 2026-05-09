@@ -5,15 +5,20 @@ metadata:
   namespace: monitoring
   labels:
     dashboards: grafana
+
 spec:
   config:
+
     server:
       root_url: https://grafana-monitoring.apps.ocp4.infrahub.com
+
     security:
       admin_user: admin
       admin_password: admin1234567890
+
     auth:
       disable_login_form: "false"
+
     auth.generic_oauth:
       enabled: "true"
       name: Keycloak
@@ -21,29 +26,53 @@ spec:
       client_id: grafana
       client_secret: zCK9pIZmQHDy84Shkg3s8RfELS9aLNUn
       scopes: openid email profile
+
       auth_url: https://keycloak.apps.ocp4.infrahub.com/realms/infrahub/protocol/openid-connect/auth
+
       token_url: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/infrahub/protocol/openid-connect/token
+
       api_url: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/infrahub/protocol/openid-connect/userinfo
+
       tls_skip_verify_insecure: "true"
+
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || 'Viewer'"
+
     log:
       mode: console
+
     plugins:
       allow_loading_unsigned_plugins: "yesoreyeram-infinity-datasource,marcusolsson-dynamictext-panel"
-  version: image-registry.openshift-image-registry.svc:5000/monitoring/grafana-custom:12.4.1
+
+    feature_toggles:
+      enable: "pluginsAutoUpdate=false"
+
+  version: "image-registry.openshift-image-registry.svc:5000/monitoring/grafana-enterprise-ui:latest"
+
   deployment:
     spec:
       template:
         spec:
+
           nodeSelector:
             kubernetes.io/hostname: worker2.ocp4.infrahub.com
+
           containers:
             - name: grafana
+
+              env:
+
+                - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
+                  value: "yesoreyeram-infinity-datasource,marcusolsson-dynamictext-panel"
+
+                - name: GF_FEATURE_TOGGLES_ENABLE
+                  value: "pluginsAutoUpdate=false"
+
               resources:
                 requests:
                   cpu: 50m
                   memory: 128Mi
                   ephemeral-storage: 200Mi
+
                 limits:
                   cpu: 200m
                   memory: 256Mi

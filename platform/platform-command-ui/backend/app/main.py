@@ -8,7 +8,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 PROMETHEUS_URL = os.getenv(
     "PROMETHEUS_URL",
-    "http://prometheus-operated.monitoring.svc.cluster.local:9090",
+    "https://thanos-querier.openshift-monitoring.svc.cluster.local:9091",
+)
+
+PROMETHEUS_TOKEN_FILE = os.getenv(
+    "PROMETHEUS_TOKEN_FILE",
+    "/var/run/secrets/kubernetes.io/serviceaccount/token",
+)
+
+PROMETHEUS_VERIFY_SSL = (
+    os.getenv("PROMETHEUS_VERIFY_SSL", "false").lower() == "true"
 )
 
 app = FastAPI(title="Sovereign Platform Command API")
@@ -22,14 +31,33 @@ app.add_middleware(
 )
 
 
+def get_token() -> str:
+    with open(PROMETHEUS_TOKEN_FILE, "r") as f:
+        return f.read().strip()
+
+
 async def prom_query(query: str) -> Any:
-    async with httpx.AsyncClient(timeout=10) as client:
+    token = get_token()
+
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+
+    async with httpx.AsyncClient(
+        timeout=10,
+        verify=PROMETHEUS_VERIFY_SSL,
+    ) as client:
+
         response = await client.get(
             f"{PROMETHEUS_URL}/api/v1/query",
             params={"query": query},
+            headers=headers,
         )
+
         response.raise_for_status()
+
         data = response.json()
+
         return data["data"]["result"]
 
 
@@ -61,6 +89,7 @@ async def overview():
     }
 
     results = {}
+
     for key, query in queries.items():
         results[key] = value(await prom_query(query))
 

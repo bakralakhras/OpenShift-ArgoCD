@@ -1,4 +1,5 @@
 resources:
   - namespace.yaml
+  - rbac.yaml
   - backend.yaml
   - frontend.yaml

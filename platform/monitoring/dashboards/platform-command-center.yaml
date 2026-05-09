@@ -1,0 +1,523 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: platform-command-center
+  namespace: monitoring
+
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+
+  json: |
+    {
+      "title": "Sovereign Platform Command Center",
+      "uid": "platform-command-center",
+      "schemaVersion": 38,
+      "style": "dark",
+      "timezone": "browser",
+      "refresh": "10s",
+
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+
+      "panels": [
+
+        {
+          "id": 1,
+          "title": "Platform Health",
+          "type": "gauge",
+
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 0,
+            "y": 0
+          },
+
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100,
+
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#E02F44",
+                    "value": null
+                  },
+                  {
+                    "color": "#FF9830",
+                    "value": 60
+                  },
+                  {
+                    "color": "#73BF69",
+                    "value": 85
+                  }
+                ]
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "clamp_max(clamp_min(100 - (count(kube_pod_status_phase{phase!=\"Running\",phase!=\"Succeeded\"}) * 0.15) - (sum(increase(kube_pod_container_status_restarts_total[1h])) * 0.5), 0), 100)",
+
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 2,
+          "title": "Nodes",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 4,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none"
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "sum(kube_node_status_condition{condition=\"Ready\",status=\"true\"})",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 3,
+          "title": "Bad Pods",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 6,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#73BF69",
+                    "value": null
+                  },
+                  {
+                    "color": "#FF9830",
+                    "value": 50
+                  },
+                  {
+                    "color": "#E02F44",
+                    "value": 150
+                  }
+                ]
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "count(kube_pod_status_phase{phase!=\"Running\",phase!=\"Succeeded\"})",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 4,
+          "title": "Argo Synced",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 8,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none"
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "sum(argocd_app_info{sync_status=\"Synced\"})",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 5,
+          "title": "Targets",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 10,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none"
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "sum(up)",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 6,
+          "title": "CPU",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 12,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit"
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "avg(1 - rate(node_cpu_seconds_total{mode=\"idle\"}[5m]))",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 7,
+          "title": "Memory",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 2,
+            "w": 2,
+            "x": 14,
+            "y": 0
+          },
+
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit"
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "1 - (sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 8,
+          "title": "Platform Topology",
+          "type": "text",
+
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 4,
+            "y": 2
+          },
+
+          "options": {
+            "mode": "html",
+
+            "content": "<div style='padding:20px;font-family:Inter,system-ui;color:#d8dee9;background:#11161c;height:100%;border-radius:8px;'><div style='font-size:22px;font-weight:600;margin-bottom:30px;'>Live Platform Flow</div><div style='display:flex;justify-content:space-between;align-items:center;height:70%;'><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>Users</div><div style='margin-top:10px;color:#5f6b7a;'>Ingress</div></div><div style='font-size:30px;color:#3b4252;'>→</div><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>NiFi</div><div style='margin-top:10px;color:#5f6b7a;'>Streaming</div></div><div style='font-size:30px;color:#3b4252;'>→</div><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>Kafka</div><div style='margin-top:10px;color:#5f6b7a;'>Event Bus</div></div><div style='font-size:30px;color:#3b4252;'>→</div><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>Spark</div><div style='margin-top:10px;color:#5f6b7a;'>Fraud Engine</div></div><div style='font-size:30px;color:#3b4252;'>→</div><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>MinIO</div><div style='margin-top:10px;color:#5f6b7a;'>Iceberg</div></div><div style='font-size:30px;color:#3b4252;'>→</div><div style='text-align:center;'><div style='font-size:18px;color:#73BF69;'>Trino</div><div style='margin-top:10px;color:#5f6b7a;'>Analytics</div></div></div></div>"
+          }
+        },
+
+        {
+          "id": 9,
+          "title": "Namespace Memory Pressure",
+          "type": "bargauge",
+
+          "gridPos": {
+            "h": 8,
+            "w": 7,
+            "x": 16,
+            "y": 2
+          },
+
+          "options": {
+            "orientation": "horizontal",
+            "displayMode": "gradient"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "topk(10, sum by (namespace) (container_memory_working_set_bytes{container!=\"\"}))",
+
+              "instant": true,
+              "legendFormat": "{{namespace}}"
+            }
+          ]
+        },
+
+        {
+          "id": 10,
+          "title": "Transactions",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 0,
+            "y": 10
+          },
+
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "#5794F2"
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "fraud_total_transactions_all",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 11,
+          "title": "Fraud Cases",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 4,
+            "y": 10
+          },
+
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "#E02F44"
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "fraud_total_fraud_count_all",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 12,
+          "title": "Fraud Rate",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 8,
+            "y": 10
+          },
+
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "#FF9830"
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "fraud_avg_fraud_rate_all",
+              "instant": true
+            }
+          ]
+        },
+
+        {
+          "id": 13,
+          "title": "Decisions",
+          "type": "stat",
+
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 12,
+            "y": 10
+          },
+
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "#73BF69"
+              }
+            }
+          },
+
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"
+              },
+
+              "expr": "fraud_silver_decisions_count",
+              "instant": true
+            }
+          ]
+        }
+      ]
+    }

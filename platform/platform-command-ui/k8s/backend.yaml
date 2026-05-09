@@ -13,6 +13,7 @@ spec:
       labels:
         app: command-api
     spec:
+      serviceAccountName: command-api
       containers:
         - name: command-api
           image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-api:latest
@@ -20,7 +21,11 @@ spec:
             - containerPort: 8080
           env:
             - name: PROMETHEUS_URL
-              value: http://prometheus-operated.monitoring.svc.cluster.local:9090
+              value: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
+            - name: PROMETHEUS_TOKEN_FILE
+              value: /var/run/secrets/kubernetes.io/serviceaccount/token
+            - name: PROMETHEUS_VERIFY_SSL
+              value: "false"
 ---
 apiVersion: v1
 kind: Service

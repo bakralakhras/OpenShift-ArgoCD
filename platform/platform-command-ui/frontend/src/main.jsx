@@ -78,7 +78,7 @@ function App() {
           <div className="flow">
             <Node title="Ingress" subtitle="Entry layer" />
             <Zap className="arrow" />
-            <Node title="NiFi" subtitle="Ingestion" />
+            <Node title="Spark Batch" subtitle="Bronze → Silver" />
             <Zap className="arrow" />
             <Node title="Kafka" subtitle="Event bus" />
             <Zap className="arrow" />

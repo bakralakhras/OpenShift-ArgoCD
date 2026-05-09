@@ -29,7 +29,8 @@ spec:
     log:
       mode: console
     plugins:
-      allow_loading_unsigned_plugins: "yesoreyeram-infinity-datasource"
+      allow_loading_unsigned_plugins: "yesoreyeram-infinity-datasource,marcusolsson-dynamictext-panel"
+  version: image-registry.openshift-image-registry.svc:5000/monitoring/grafana-custom:12.4.1
   deployment:
     spec:
       template:
@@ -38,9 +39,6 @@ spec:
             kubernetes.io/hostname: worker2.ocp4.infrahub.com
           containers:
             - name: grafana
-              env:
-                - name: GF_INSTALL_PLUGINS
-                  value: "yesoreyeram-infinity-datasource"
               resources:
                 requests:
                   cpu: 50m

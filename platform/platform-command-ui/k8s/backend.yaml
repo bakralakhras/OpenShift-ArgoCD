@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: command-api
+  namespace: platform-command-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: command-api
+  template:
+    metadata:
+      labels:
+        app: command-api
+    spec:
+      containers:
+        - name: command-api
+          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PROMETHEUS_URL
+              value: http://prometheus-operated.monitoring.svc.cluster.local:9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: command-api
+  namespace: platform-command-ui
+spec:
+  selector:
+    app: command-api
+  ports:
+    - port: 8080
+      targetPort: 8080

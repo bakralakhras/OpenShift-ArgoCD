@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-command-ui
+  namespace: openshift-gitops
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/bakralakhras/OpenShift-ArgoCD.git
+    targetRevision: main
+    path: platform/platform-command-ui/k8s
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: platform-command-ui
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

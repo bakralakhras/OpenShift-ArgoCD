@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: command-ui
+  namespace: platform-command-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: command-ui
+  template:
+    metadata:
+      labels:
+        app: command-ui
+    spec:
+      containers:
+        - name: command-ui
+          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-ui:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: command-ui
+  namespace: platform-command-ui
+spec:
+  selector:
+    app: command-ui
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: command-ui
+  namespace: platform-command-ui
+spec:
+  to:
+    kind: Service
+    name: command-ui
+  port:
+    targetPort: 8080

@@ -47,7 +47,6 @@ async def prom_query(query: str) -> Any:
         timeout=10,
         verify=PROMETHEUS_VERIFY_SSL,
     ) as client:
-
         response = await client.get(
             f"{PROMETHEUS_URL}/api/v1/query",
             params={"query": query},
@@ -55,7 +54,6 @@ async def prom_query(query: str) -> Any:
         )
 
         response.raise_for_status()
-
         data = response.json()
 
         return data["data"]["result"]
@@ -77,7 +75,7 @@ async def health():
 async def overview():
     queries = {
         "nodes_ready": 'sum(kube_node_status_condition{condition="Ready",status="true"})',
-        "bad_pods": 'count(kube_pod_status_phase{phase!="Running",phase!="Succeeded"})',
+        "bad_pods": 'count(kube_pod_status_phase{phase=~"Failed|Pending|Unknown"} == 1)',
         "targets_up": "sum(up)",
         "cpu": 'avg(1 - rate(node_cpu_seconds_total{mode="idle"}[5m]))',
         "memory": "1 - (sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))",
@@ -102,9 +100,9 @@ async def overview():
         min(
             100,
             100
-            - (bad_pods * 0.12)
-            - (cpu * 20)
-            - (memory * 10),
+            - (bad_pods * 0.02)
+            - (cpu * 10)
+            - (memory * 8),
         ),
     )
 

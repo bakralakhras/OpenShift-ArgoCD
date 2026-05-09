@@ -92,7 +92,7 @@ def main():
             ingestion_id string,
             transaction_date string
         ) USING iceberg
-        LOCATION 's3a://warehouse/silver/decisions'
+
     """)
 
     spark.sql("""
@@ -107,7 +107,7 @@ def main():
             transaction_hour integer,
             ingestion_id string
         ) USING iceberg
-        LOCATION 's3a://warehouse/silver/transactions'
+
     """)
     print("Tables ready")
 

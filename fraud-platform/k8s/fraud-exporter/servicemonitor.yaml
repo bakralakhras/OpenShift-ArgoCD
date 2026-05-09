@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fraud-metrics-exporter
+  namespace: kafka
+  labels:
+    app: fraud-metrics-exporter
+spec:
+  selector:
+    matchLabels:
+      app: fraud-metrics-exporter
+  endpoints:
+    - port: metrics
+      interval: 60s
+      path: /metrics

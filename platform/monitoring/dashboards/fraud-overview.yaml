@@ -1,0 +1,394 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: fraud-overview
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  json: |
+    {
+      "title": "Fraud Detection Platform",
+      "uid": "fraud-overview",
+      "tags": ["fraud", "business", "gold"],
+      "timezone": "browser",
+      "schemaVersion": 38,
+      "style": "dark",
+      "refresh": "1m",
+      "time": {"from": "now-6h", "to": "now"},
+      "templating": {"list": []},
+      "panels": [
+        {
+          "id": 1,
+          "title": "TOTAL TRANSACTIONS",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 5, "x": 0, "y": 0},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "auto",
+            "justifyMode": "center",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#7c8cf8"},
+              "unit": "short",
+              "decimals": 0,
+              "noValue": "0"
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_total_transactions_all",
+            "instant": true
+          }]
+        },
+        {
+          "id": 2,
+          "title": "FRAUD CASES DETECTED",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 5, "x": 5, "y": 0},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#e84040"},
+              "unit": "short",
+              "decimals": 0
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_total_fraud_count_all",
+            "instant": true
+          }]
+        },
+        {
+          "id": 3,
+          "title": "AVG FRAUD RATE",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 5, "x": 10, "y": 0},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#f0a050"},
+              "unit": "percentunit",
+              "decimals": 2
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_avg_fraud_rate_all",
+            "instant": true
+          }]
+        },
+        {
+          "id": 4,
+          "title": "BLOCKED TRANSACTIONS",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 5, "x": 15, "y": 0},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#4caf8a"},
+              "unit": "short",
+              "decimals": 0
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_total_blocked_all",
+            "instant": true
+          }]
+        },
+        {
+          "id": 5,
+          "title": "DAYS OF DATA TRACKED",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 4, "x": 20, "y": 0},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#9b59b6"},
+              "unit": "short",
+              "decimals": 0
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_days_tracked",
+            "instant": true
+          }]
+        },
+        {
+          "id": 6,
+          "title": "Fraud Rate Gauge — Current Day",
+          "type": "gauge",
+          "gridPos": {"h": 8, "w": 6, "x": 0, "y": 4},
+          "options": {
+            "reduceOptions": {"calcs": ["lastNotNull"]},
+            "showThresholdLabels": true,
+            "showThresholdMarkers": true
+          },
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "max": 0.15,
+              "unit": "percentunit",
+              "decimals": 2,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "#4caf8a", "value": null},
+                  {"color": "#f0a050", "value": 0.03},
+                  {"color": "#e84040", "value": 0.07}
+                ]
+              },
+              "color": {"mode": "thresholds"}
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_daily_fraud_rate",
+            "instant": true
+          }]
+        },
+        {
+          "id": 7,
+          "title": "Fraud Rate by Product Code",
+          "type": "bargauge",
+          "gridPos": {"h": 8, "w": 9, "x": 6, "y": 4},
+          "options": {
+            "orientation": "horizontal",
+            "reduceOptions": {"calcs": ["lastNotNull"]},
+            "displayMode": "gradient",
+            "valueMode": "color"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 2,
+              "min": 0,
+              "max": 0.15,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "#4caf8a", "value": null},
+                  {"color": "#f0a050", "value": 0.04},
+                  {"color": "#e84040", "value": 0.08}
+                ]
+              },
+              "color": {"mode": "thresholds"}
+            }
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_product_fraud_rate",
+              "instant": true,
+              "legendFormat": "{{product}}"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Hourly Fraud Rate — 24h Pattern",
+          "type": "barchart",
+          "gridPos": {"h": 8, "w": 9, "x": 15, "y": 4},
+          "options": {
+            "orientation": "auto",
+            "groupWidth": 0.7,
+            "barWidth": 0.97,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "legend": {"displayMode": "hidden"},
+            "tooltip": {"mode": "single"}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 2,
+              "color": {"mode": "fixed", "fixedColor": "#7c8cf8"},
+              "custom": {
+                "fillOpacity": 80,
+                "lineWidth": 0
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "#4caf8a", "value": null},
+                  {"color": "#f0a050", "value": 0.03},
+                  {"color": "#e84040", "value": 0.06}
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {"id": "byFrameRefID", "options": "A"},
+                "properties": [{"id": "color", "value": {"mode": "thresholds"}}]
+              }
+            ]
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_hourly_fraud_rate",
+            "instant": true,
+            "legendFormat": "Hour {{hour}}"
+          }]
+        },
+        {
+          "id": 9,
+          "title": "Rule Performance — Precision Score",
+          "type": "bargauge",
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+          "options": {
+            "orientation": "horizontal",
+            "reduceOptions": {"calcs": ["lastNotNull"]},
+            "displayMode": "gradient"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 2,
+              "min": 0,
+              "max": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "#e84040", "value": null},
+                  {"color": "#f0a050", "value": 0.3},
+                  {"color": "#4caf8a", "value": 0.6}
+                ]
+              },
+              "color": {"mode": "thresholds"}
+            }
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_rule_precision",
+            "instant": true,
+            "legendFormat": "{{rule}}"
+          }]
+        },
+        {
+          "id": 10,
+          "title": "Silver Layer — Row Counts",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 6, "x": 12, "y": 12},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "textMode": "value_and_name",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#4caf8a"},
+              "unit": "short",
+              "decimals": 0
+            }
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_silver_decisions_count",
+              "instant": true,
+              "legendFormat": "Decisions"
+            },
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_silver_transactions_count",
+              "instant": true,
+              "legendFormat": "Transactions"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "UID Risk Tier Distribution",
+          "type": "piechart",
+          "gridPos": {"h": 4, "w": 6, "x": 18, "y": 12},
+          "options": {
+            "pieType": "donut",
+            "legend": {"displayMode": "table", "placement": "right"},
+            "tooltip": {"mode": "single"}
+          },
+          "fieldConfig": {
+            "defaults": {"unit": "short", "decimals": 0},
+            "overrides": [
+              {"matcher": {"id": "byName", "options": "HIGH"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#e84040"}}]},
+              {"matcher": {"id": "byName", "options": "MEDIUM"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#f0a050"}}]},
+              {"matcher": {"id": "byName", "options": "LOW"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#4caf8a"}}]}
+            ]
+          },
+          "targets": [{
+            "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+            "expr": "fraud_uid_risk_count",
+            "instant": true,
+            "legendFormat": "{{tier}}"
+          }]
+        },
+        {
+          "id": 12,
+          "title": "Daily Fraud Count — Latest Day Detail",
+          "type": "stat",
+          "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16},
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "textMode": "value_and_name",
+            "reduceOptions": {"calcs": ["lastNotNull"]}
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "fixed", "fixedColor": "#7c8cf8"},
+              "unit": "short",
+              "decimals": 0
+            }
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_daily_total_transactions",
+              "instant": true,
+              "legendFormat": "Transactions"
+            },
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_daily_fraud_count",
+              "instant": true,
+              "legendFormat": "Fraud"
+            },
+            {
+              "datasource": {"type": "prometheus", "uid": "9e5b7c92-d205-4816-8962-8d8856c180b8"},
+              "expr": "fraud_daily_blocked_count",
+              "instant": true,
+              "legendFormat": "Blocked"
+            }
+          ]
+        }
+      ]
+    }

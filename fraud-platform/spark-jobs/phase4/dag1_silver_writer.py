@@ -21,7 +21,7 @@ def fetch_schema_json(schema_id):
     resp.raise_for_status()
     raw = resp.json()["schema"]
     if isinstance(raw, str):
-        return raw  # return as string for broadcasting
+        return raw
     return json.dumps(raw)
 
 def make_decoder_udf(schema_json_broadcast):
@@ -50,7 +50,7 @@ def make_decoder_udf(schema_json_broadcast):
                 else:
                     result[k] = str(v)
             return result
-        except Exception as e:
+        except Exception:
             return None
     return decoder
 
@@ -62,15 +62,54 @@ def main():
     spark.sparkContext.setLogLevel("WARN")
     print("=== Phase 4 Silver Writer Starting ===")
 
-    # Fetch schemas ONCE in driver
+    # Fetch schemas ONCE in driver and broadcast
     print("Fetching schemas from registry...")
     decisions_schema_json = fetch_schema_json(5)
     audit_schema_json = fetch_schema_json(6)
     print("Schemas fetched successfully")
 
-    # Broadcast schemas to all executors
     decisions_schema_bc = spark.sparkContext.broadcast(decisions_schema_json)
     audit_schema_bc = spark.sparkContext.broadcast(audit_schema_json)
+
+    # Create silver tables in Hadoop catalog if they don't exist
+    print("Creating silver tables if not exist...")
+    spark.sql("""
+        CREATE TABLE IF NOT EXISTS hadoop_cat.warehouse_silver.decisions (
+            transactionid integer,
+            uid string,
+            transactionamt double,
+            productcd string,
+            card4 string,
+            card6 string,
+            p_emaildomain string,
+            transaction_hour integer,
+            fraud_score double,
+            decision string,
+            decision_reason string,
+            model_version string,
+            rules_triggered string,
+            isfraud integer,
+            ingestion_id string,
+            transaction_date string
+        ) USING iceberg
+        LOCATION 's3a://warehouse/silver/decisions'
+    """)
+
+    spark.sql("""
+        CREATE TABLE IF NOT EXISTS hadoop_cat.warehouse_silver.transactions (
+            transactionid integer,
+            isfraud integer,
+            transactionamt double,
+            productcd string,
+            uid string,
+            transaction_date string,
+            event_timestamp string,
+            transaction_hour integer,
+            ingestion_id string
+        ) USING iceberg
+        LOCATION 's3a://warehouse/silver/transactions'
+    """)
+    print("Tables ready")
 
     # --- fraud-decisions ---
     print("Reading fraud-decisions topic...")
@@ -116,9 +155,8 @@ def main():
         final_count = silver_decisions.count()
         print(f"Writing {final_count} rows to silver.decisions...")
         silver_decisions.writeTo("hadoop_cat.warehouse_silver.decisions") \
-            .option("merge-schema", "true") \
             .append()
-        print(f"silver.decisions write complete")
+        print("silver.decisions write complete")
     else:
         print("ERROR: 0 decisions decoded")
 
@@ -159,9 +197,8 @@ def main():
         final_count = silver_transactions.count()
         print(f"Writing {final_count} rows to silver.transactions...")
         silver_transactions.writeTo("hadoop_cat.warehouse_silver.transactions") \
-            .option("merge-schema", "true") \
             .append()
-        print(f"silver.transactions write complete")
+        print("silver.transactions write complete")
     else:
         print("ERROR: 0 audit records decoded")
 

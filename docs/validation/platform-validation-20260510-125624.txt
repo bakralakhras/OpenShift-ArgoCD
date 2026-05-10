@@ -1,0 +1,1133 @@
+============================================================
+SOVEREIGN DATA LAKEHOUSE PLATFORM VALIDATION
+Generated: Sun May 10 12:56:24 PM +03 2026
+User: root
+Repo: /root/OpenShift-ArgoCD
+============================================================
+
+====================
+1. CLUSTER VERSION
+====================
+Client Version: 4.21.7
+Kustomize Version: v5.7.1
+Server Version: 4.21.7
+Kubernetes Version: v1.34.5
+
+====================
+2. NODES
+====================
+NAME                        STATUS   ROLES                  AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                                                KERNEL-VERSION                 CONTAINER-RUNTIME
+master1.ocp4.infrahub.com   Ready    control-plane,master   24d     v1.34.5   172.24.66.235   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+master2.ocp4.infrahub.com   Ready    control-plane,master   24d     v1.34.5   172.24.66.234   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+master3.ocp4.infrahub.com   Ready    control-plane,master   24d     v1.34.5   172.24.66.233   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+worker1.ocp4.infrahub.com   Ready    worker                 24d     v1.34.5   172.24.66.230   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+worker2.ocp4.infrahub.com   Ready    worker                 4d4h    v1.34.5   172.24.66.226   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+worker3.ocp4.infrahub.com   Ready    worker                 4d2h    v1.34.5   172.24.66.229   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+worker4.ocp4.infrahub.com   Ready    worker                 4d2h    v1.34.5   172.24.66.228   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+worker5.ocp4.infrahub.com   Ready    worker                 4d20h   v1.34.5   172.24.66.232   <none>        Red Hat Enterprise Linux CoreOS 9.6.20260318-0 (Plow)   5.14.0-570.99.1.el9_6.x86_64   cri-o://1.34.6-2.rhaos4.21.gitbca534a.el9
+
+Node count:
+8
+
+Schedulable masters:
+master1.ocp4.infrahub.com   Ready   control-plane,master   24d   v1.34.5
+master2.ocp4.infrahub.com   Ready   control-plane,master   24d   v1.34.5
+master3.ocp4.infrahub.com   Ready   control-plane,master   24d   v1.34.5
+
+Workers:
+worker1.ocp4.infrahub.com   Ready   worker   24d     v1.34.5
+worker2.ocp4.infrahub.com   Ready   worker   4d4h    v1.34.5
+worker3.ocp4.infrahub.com   Ready   worker   4d2h    v1.34.5
+worker4.ocp4.infrahub.com   Ready   worker   4d2h    v1.34.5
+worker5.ocp4.infrahub.com   Ready   worker   4d20h   v1.34.5
+
+====================
+3. ARGOCD APPLICATIONS
+====================
+NAME                        SYNC STATUS   HEALTH STATUS
+airflow                     OutOfSync     Missing
+airflow-monitoring          Synced        Healthy
+fraud-platform-spark-jobs   Synced        Healthy
+hive-metastore              Synced        Healthy
+kafka                       Synced        Healthy
+keycloak                    OutOfSync     Healthy
+local-path-provisioner      Synced        Healthy
+minio                       Synced        Healthy
+monitoring                  Synced        Healthy
+namespaces                  Synced        Healthy
+nifi                        Synced        Healthy
+platform-command-ui         Synced        Healthy
+platform-spark              Synced        Healthy
+postgresql                  Synced        Healthy
+postgresql-monitoring       Synced        Healthy
+rook-ceph-cluster           Synced        Degraded
+rook-ceph-operator          Synced        Healthy
+root                        OutOfSync     Healthy
+schema-registry             Synced        Progressing
+signal-engine               Synced        Healthy
+spark                       Synced        Healthy
+superset                    Synced        Healthy
+trino                       OutOfSync     Healthy
+vault                       Synced        Healthy
+vault-config                Synced        Healthy
+vault-monitoring            Synced        Healthy
+vault-secrets-operator      Synced        Healthy
+
+ArgoCD app count:
+27
+
+Apps not Synced/Healthy:
+airflow                     OutOfSync   Missing
+keycloak                    OutOfSync   Healthy
+rook-ceph-cluster           Synced      Degraded
+root                        OutOfSync   Healthy
+schema-registry             Synced      Progressing
+trino                       OutOfSync   Healthy
+
+====================
+4. KEY NAMESPACES
+====================
+--- namespace: kafka
+NAME    STATUS   AGE
+kafka   Active   21d
+--- namespace: spark
+NAME    STATUS   AGE
+spark   Active   16d
+--- namespace: minio
+NAME    STATUS   AGE
+minio   Active   21d
+--- namespace: lakehouse
+NAME        STATUS   AGE
+lakehouse   Active   21d
+--- namespace: trino
+NAME    STATUS   AGE
+trino   Active   20d
+--- namespace: airflow
+NAME      STATUS   AGE
+airflow   Active   18d
+--- namespace: monitoring
+NAME         STATUS   AGE
+monitoring   Active   21d
+--- namespace: superset
+NAME       STATUS   AGE
+superset   Active   21d
+--- namespace: vault
+NAME    STATUS   AGE
+vault   Active   21d
+--- namespace: schema-registry
+NAME              STATUS   AGE
+schema-registry   Active   12d
+--- namespace: platform-command-ui
+NAME                  STATUS   AGE
+platform-command-ui   Active   12h
+--- namespace: postgresql
+NAME         STATUS   AGE
+postgresql   Active   20d
+--- namespace: rook-ceph
+NAME        STATUS   AGE
+rook-ceph   Active   4d1h
+
+====================
+5. POD HEALTH BY PLATFORM NAMESPACE
+====================
+
+----- kafka -----
+NAME                                                READY   STATUS      RESTARTS       AGE     IP            NODE                        NOMINATED NODE   READINESS GATES
+fraud-metrics-exporter-d6ff854b7-c9fgq              1/1     Running     0              13h     10.131.0.79   worker1.ocp4.infrahub.com   <none>           <none>
+kafka-connect-connect-0                             1/1     Running     0              4d      10.129.4.44   worker3.ocp4.infrahub.com   <none>           <none>
+kafka-connect-connect-build-1-build                 0/1     Completed   0              4d      10.129.4.43   worker3.ocp4.infrahub.com   <none>           <none>
+lakehouse-kafka-entity-operator-67576899fb-ghpnr    2/2     Running     1 (4d1h ago)   4d1h    10.130.2.26   worker5.ocp4.infrahub.com   <none>           <none>
+lakehouse-kafka-kafka-nodepool-0                    1/1     Running     0              4d1h    10.129.4.36   worker3.ocp4.infrahub.com   <none>           <none>
+lakehouse-kafka-kafka-nodepool-1                    1/1     Running     0              4d1h    10.130.4.35   worker4.ocp4.infrahub.com   <none>           <none>
+lakehouse-kafka-kafka-nodepool-2                    1/1     Running     0              4d1h    10.130.2.27   worker5.ocp4.infrahub.com   <none>           <none>
+signal-engine-1-build                               0/1     Completed   0              4d      10.129.4.42   worker3.ocp4.infrahub.com   <none>           <none>
+signal-engine-8c97fcbb6-8fnxr                       1/1     Running     0              3d21h   10.130.2.35   worker5.ocp4.infrahub.com   <none>           <none>
+strimzi-cluster-operator-v0.51.0-54f85b999c-dqfxq   1/1     Running     0              4d3h    10.131.2.19   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- spark -----
+NAME                                        READY   STATUS      RESTARTS   AGE     IP            NODE                        NOMINATED NODE   READINESS GATES
+fraud-spark-1-build                         0/1     Completed   0          3d22h   10.130.2.32   worker5.ocp4.infrahub.com   <none>           <none>
+spark-operator-controller-d69585597-kn7hn   1/1     Running     0          4d3h    10.130.2.17   worker5.ocp4.infrahub.com   <none>           <none>
+spark-operator-webhook-7944f988fc-4s85m     1/1     Running     0          4d3h    10.131.2.22   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- minio -----
+NAME                     READY   STATUS    RESTARTS   AGE     IP           NODE                        NOMINATED NODE   READINESS GATES
+minio-7585647956-q9ndj   1/1     Running   0          5d15h   10.131.0.4   worker1.ocp4.infrahub.com   <none>           <none>
+
+----- lakehouse -----
+NAME                              READY   STATUS    RESTARTS   AGE   IP             NODE                        NOMINATED NODE   READINESS GATES
+hive-metastore-5cdcdc95bf-6vk5c   1/1     Running   0          47h   10.131.2.176   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- trino -----
+NAME                     READY   STATUS    RESTARTS   AGE     IP            NODE                        NOMINATED NODE   READINESS GATES
+trino-55c9f59955-8qx9d   1/1     Running   0          3d21h   10.131.2.66   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- airflow -----
+NAME                                     READY   STATUS    RESTARTS   AGE   IP             NODE                        NOMINATED NODE   READINESS GATES
+airflow-api-server-66666d9c89-6vsff      1/1     Running   0          46h   10.129.4.195   worker3.ocp4.infrahub.com   <none>           <none>
+airflow-dag-processor-6d65745674-tqv57   2/2     Running   0          20h   10.129.5.6     worker3.ocp4.infrahub.com   <none>           <none>
+airflow-scheduler-0                      2/2     Running   0          20h   10.130.2.151   worker5.ocp4.infrahub.com   <none>           <none>
+
+----- monitoring -----
+NAME                                                      READY   STATUS        RESTARTS          AGE     IP             NODE                        NOMINATED NODE   READINESS GATES
+grafana-deployment-74877f4c9d-db98z                       1/1     Running       0                 12h     10.131.3.41    worker2.ocp4.infrahub.com   <none>           <none>
+grafana-operator-controller-manager-v5-8494f5dbfd-9ghhp   1/1     Terminating   252 (5d15h ago)   10d     10.128.0.208   master1.ocp4.infrahub.com   <none>           <none>
+grafana-operator-controller-manager-v5-8494f5dbfd-hqprb   1/1     Running       0                 4d20h   10.130.2.13    worker5.ocp4.infrahub.com   <none>           <none>
+
+----- superset -----
+NAME                        READY   STATUS    RESTARTS   AGE   IP           NODE                        NOMINATED NODE   READINESS GATES
+superset-5b4c64b79d-797pw   1/1     Running   0          19h   10.129.5.7   worker3.ocp4.infrahub.com   <none>           <none>
+
+----- vault -----
+NAME      READY   STATUS    RESTARTS   AGE    IP            NODE                        NOMINATED NODE   READINESS GATES
+vault-0   1/1     Running   0          4d4h   10.131.2.13   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- schema-registry -----
+NAME                                        READY   STATUS    RESTARTS         AGE     IP            NODE                        NOMINATED NODE   READINESS GATES
+apicurio-registry-7c8864f4dc-vvfbz          1/1     Running   468 (4d1h ago)   5d15h   10.131.0.10   worker1.ocp4.infrahub.com   <none>           <none>
+schema-registry-postgres-59c555747d-gmq8m   1/1     Running   0                3d21h   10.129.4.59   worker3.ocp4.infrahub.com   <none>           <none>
+
+----- platform-command-ui -----
+NAME                           READY   STATUS    RESTARTS   AGE   IP            NODE                        NOMINATED NODE   READINESS GATES
+command-api-6865894bbf-fs76g   1/1     Running   0          11h   10.131.0.96   worker1.ocp4.infrahub.com   <none>           <none>
+command-ui-5665bdc7dd-wzft8    1/1     Running   0          10h   10.131.0.98   worker1.ocp4.infrahub.com   <none>           <none>
+
+----- postgresql -----
+NAME                                 READY   STATUS    RESTARTS   AGE    IP            NODE                        NOMINATED NODE   READINESS GATES
+postgres-exporter-64b5bf7d98-jknlx   1/1     Running   0          4d3h   10.131.2.37   worker2.ocp4.infrahub.com   <none>           <none>
+postgresql-0                         1/1     Running   0          4d1h   10.131.2.43   worker2.ocp4.infrahub.com   <none>           <none>
+
+----- rook-ceph -----
+NAME                                                              READY   STATUS      RESTARTS       AGE     IP              NODE                        NOMINATED NODE   READINESS GATES
+csi-cephfsplugin-2249b                                            2/2     Running     1 (4d1h ago)   4d1h    172.24.66.226   worker2.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-9h6l4                                            2/2     Running     0              4d1h    172.24.66.229   worker3.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-provisioner-79b69b77d-2rwfl                      5/5     Running     0              4d1h    10.130.4.14     worker4.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-provisioner-79b69b77d-57x79                      5/5     Running     0              4d1h    10.129.4.16     worker3.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-pw2dt                                            2/2     Running     0              4d1h    172.24.66.230   worker1.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-svzxs                                            2/2     Running     1 (4d1h ago)   4d1h    172.24.66.232   worker5.ocp4.infrahub.com   <none>           <none>
+csi-cephfsplugin-t78nd                                            2/2     Running     1 (4d1h ago)   4d1h    172.24.66.228   worker4.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-7vcht                                               2/2     Running     1 (4d1h ago)   4d1h    172.24.66.230   worker1.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-8jjms                                               2/2     Running     1 (4d1h ago)   4d1h    172.24.66.232   worker5.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-gnsbb                                               2/2     Running     0              4d1h    172.24.66.229   worker3.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-gvxvc                                               2/2     Running     1 (4d1h ago)   4d1h    172.24.66.226   worker2.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-mqwxf                                               2/2     Running     0              4d1h    172.24.66.228   worker4.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-provisioner-654768d55b-blplv                        5/5     Running     0              4d1h    10.129.4.14     worker3.ocp4.infrahub.com   <none>           <none>
+csi-rbdplugin-provisioner-654768d55b-bp57l                        5/5     Running     1 (4d1h ago)   4d1h    10.130.4.13     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-crashcollector-worker2.ocp4.infrahub.com-d64f6585fz55   1/1     Running     0              3d23h   10.131.2.58     worker2.ocp4.infrahub.com   <none>           <none>
+rook-ceph-crashcollector-worker3.ocp4.infrahub.com-568dd4bk9mdk   1/1     Running     0              4d1h    10.129.4.27     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-crashcollector-worker4.ocp4.infrahub.com-7bcbbd8vx7vs   1/1     Running     0              4d1h    10.130.4.27     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-crashcollector-worker5.ocp4.infrahub.com-795584cmdgz8   1/1     Running     0              4d1h    10.130.2.22     worker5.ocp4.infrahub.com   <none>           <none>
+rook-ceph-exporter-worker2.ocp4.infrahub.com-7ddb44b9f4-d58kh     1/1     Running     0              3d23h   10.131.2.59     worker2.ocp4.infrahub.com   <none>           <none>
+rook-ceph-exporter-worker3.ocp4.infrahub.com-6c9dd7f867-6fk5k     1/1     Running     0              4d1h    10.129.4.32     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-exporter-worker4.ocp4.infrahub.com-5dd9874f58-8j54r     1/1     Running     0              4d1h    10.130.4.29     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-exporter-worker5.ocp4.infrahub.com-548f6c6565-t6t54     1/1     Running     0              4d1h    10.130.2.23     worker5.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mds-ceph-filesystem-a-6d6db48cbd-76qrp                  1/1     Running     0              4d1h    10.130.4.26     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mds-ceph-filesystem-b-5fb677f9d5-29xcz                  1/1     Running     0              4d1h    10.130.4.28     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mgr-a-7bc45b5c8b-q582v                                  2/2     Running     0              4d1h    10.130.4.17     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mgr-b-67ccc9dff6-jxv2x                                  2/2     Running     0              4d1h    10.129.4.22     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mon-a-6b7b7cc757-ph2md                                  1/1     Running     0              4d1h    10.130.4.16     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mon-b-5fc679d76b-mt6h9                                  1/1     Running     0              4d1h    10.129.4.21     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-mon-c-54cc5b4678-g6znr                                  1/1     Running     0              4d1h    10.130.2.21     worker5.ocp4.infrahub.com   <none>           <none>
+rook-ceph-operator-c494f6d5-2qgp5                                 1/1     Running     0              4d1h    10.130.4.11     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-0-58f4754b7f-nh4kj                                  1/1     Running     0              4d1h    10.129.4.30     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-1-68674799fd-x2nbk                                  1/1     Running     0              4d1h    10.130.4.31     worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-2-84f6799df7-lwg4h                                  1/1     Running     0              3d23h   10.131.2.57     worker2.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-prepare-worker2.ocp4.infrahub.com-w9vft             0/1     Completed   0              41m     10.131.3.70     worker2.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-prepare-worker3.ocp4.infrahub.com-k9f6f             0/1     Completed   0              41m     10.129.5.55     worker3.ocp4.infrahub.com   <none>           <none>
+rook-ceph-osd-prepare-worker4.ocp4.infrahub.com-dlls9             0/1     Completed   0              41m     10.130.5.117    worker4.ocp4.infrahub.com   <none>           <none>
+rook-ceph-tools-6fdb59cb9-z9hs2                                   1/1     Running     0              46h     10.130.4.159    worker4.ocp4.infrahub.com   <none>           <none>
+rook-discover-2zrmt                                               1/1     Running     0              4d1h    10.131.2.40     worker2.ocp4.infrahub.com   <none>           <none>
+rook-discover-d7l8l                                               1/1     Running     0              4d1h    10.131.0.24     worker1.ocp4.infrahub.com   <none>           <none>
+rook-discover-npwtw                                               1/1     Running     0              4d1h    10.129.4.12     worker3.ocp4.infrahub.com   <none>           <none>
+rook-discover-r2spg                                               1/1     Running     0              4d1h    10.130.2.19     worker5.ocp4.infrahub.com   <none>           <none>
+rook-discover-vvtn8                                               1/1     Running     0              4d1h    10.130.4.12     worker4.ocp4.infrahub.com   <none>           <none>
+
+====================
+6. BAD PODS ACROSS CLUSTER
+====================
+monitoring                                         grafana-operator-controller-manager-v5-8494f5dbfd-9ghhp           1/1   Terminating                  252 (5d15h ago)   10d
+nfs-provisioner                                    nfs-provisioner-nfs-subdir-external-provisioner-84f6b86744mj8s6   1/1   Terminating                  200 (5d16h ago)   6d17h
+nfs-provisioner                                    nfs-provisioner-nfs-subdir-external-provisioner-84f6b86744vgjcr   0/1   ContainerCreating            0                 4d20h
+openshift-apiserver-operator                       openshift-apiserver-operator-cf88499c4-gpfkw                      1/1   Terminating                  7 (6d1h ago)      24d
+openshift-apiserver-operator                       openshift-apiserver-operator-cf88499c4-p5mks                      0/1   ContainerCreating            0                 4d19h
+openshift-apiserver                                apiserver-5c4b5674f-8wl2q                                         0/2   Init:0/1                     0                 4d20h
+openshift-authentication-operator                  authentication-operator-6cc6fb88f-ntqqt                           1/1   Terminating                  291 (5d15h ago)   24d
+openshift-authentication                           oauth-openshift-7c86479db6-89c4b                                  0/1   ContainerCreating            0                 4d20h
+openshift-authentication                           oauth-openshift-7c86479db6-bp6pc                                  0/1   ContainerCreating            0                 4d20h
+openshift-catalogd                                 catalogd-controller-manager-b8499f5b5-9hcb4                       0/1   Terminating                  25 (5d16h ago)    24d
+openshift-catalogd                                 catalogd-controller-manager-b8499f5b5-bc5th                       0/1   ContainerCreating            0                 4d19h
+openshift-cloud-controller-manager-operator        cluster-cloud-controller-manager-operator-9cd88fd7c-gccj9         3/3   Terminating                  27 (6d ago)       24d
+openshift-cloud-controller-manager-operator        cluster-cloud-controller-manager-operator-9cd88fd7c-hq4wk         0/3   ContainerCreating            0                 4d19h
+openshift-cloud-credential-operator                cloud-credential-operator-7b78bbf44b-sf5tj                        0/2   ContainerCreating            0                 4d19h
+openshift-cloud-credential-operator                cloud-credential-operator-7b78bbf44b-xjm9t                        2/2   Terminating                  1 (6d8h ago)      24d
+openshift-cluster-machine-approver                 machine-approver-dbb79c57f-9cvk5                                  2/2   Terminating                  3 (6d8h ago)      24d
+openshift-cluster-node-tuning-operator             cluster-node-tuning-operator-6d988fdcf7-dx6sd                     0/1   ContainerCreating            0                 4d19h
+openshift-cluster-node-tuning-operator             cluster-node-tuning-operator-6d988fdcf7-trvl5                     1/1   Terminating                  7 (6d7h ago)      24d
+openshift-cluster-olm-operator                     cluster-olm-operator-54c94f9bbc-8xbkh                             0/1   Init:0/2                     0                 4d19h
+openshift-cluster-olm-operator                     cluster-olm-operator-54c94f9bbc-xhtdq                             1/1   Terminating                  14 (6d1h ago)     24d
+openshift-cluster-samples-operator                 cluster-samples-operator-66b6574-6644j                            2/2   Terminating                  1 (6d12h ago)     24d
+openshift-cluster-samples-operator                 cluster-samples-operator-66b6574-l5d22                            0/2   ContainerCreating            0                 4d19h
+openshift-cluster-storage-operator                 cluster-storage-operator-7b4ff94cd7-b8svh                         0/1   ContainerCreating            0                 4d19h
+openshift-cluster-storage-operator                 cluster-storage-operator-7b4ff94cd7-dvnfk                         1/1   Terminating                  4 (6d2h ago)      24d
+openshift-cluster-storage-operator                 csi-snapshot-controller-5c7596ff8f-642b7                          0/1   ContainerCreating            0                 4d19h
+openshift-cluster-storage-operator                 csi-snapshot-controller-5c7596ff8f-x4cbg                          1/1   Terminating                  10 (6d8h ago)     24d
+openshift-cluster-storage-operator                 csi-snapshot-controller-operator-7f4b7d765f-p7jwc                 0/1   ContainerCreating            0                 4d19h
+openshift-cluster-storage-operator                 csi-snapshot-controller-operator-7f4b7d765f-ql4hz                 1/1   Terminating                  13 (5d23h ago)    24d
+openshift-cluster-version                          cluster-version-operator-6c65b4d676-6w2j4                         0/1   ContainerCreating            0                 4d19h
+openshift-config-operator                          openshift-config-operator-56cbc7c874-np2dq                        0/1   Init:0/1                     0                 4d19h
+openshift-config-operator                          openshift-config-operator-56cbc7c874-t629c                        0/1   Terminating                  440 (5d15h ago)   24d
+openshift-console-operator                         console-operator-988c68fcd-45bln                                  0/1   ContainerCreating            0                 4d19h
+openshift-console-operator                         console-operator-988c68fcd-475ts                                  0/1   Terminating                  340 (5d15h ago)   24d
+openshift-console                                  console-86c9874777-kcgrj                                          0/1   ContainerCreating            0                 4d4h
+openshift-console                                  downloads-8cdd488b5-4ftnx                                         0/1   ContainerCreating            0                 4d4h
+openshift-controller-manager-operator              openshift-controller-manager-operator-77968bbc6b-wvzxz            1/1   Terminating                  13 (6d2h ago)     24d
+openshift-controller-manager                       controller-manager-6f7bc87c7c-5sw44                               0/1   ContainerCreating            0                 4d20h
+openshift-controller-manager                       controller-manager-6f7bc87c7c-vcnml                               0/1   ContainerCreating            0                 4d20h
+openshift-dns-operator                             dns-operator-b6ff6f8cb-8fxvj                                      0/2   ContainerCreating            0                 4d19h
+openshift-dns-operator                             dns-operator-b6ff6f8cb-x4hgh                                      2/2   Terminating                  0                 24d
+openshift-etcd-operator                            etcd-operator-76cb97f678-6d49z                                    1/1   Terminating                  9 (6d1h ago)      24d
+openshift-etcd-operator                            etcd-operator-76cb97f678-xkg8v                                    0/1   ContainerCreating            0                 4d19h
+openshift-etcd                                     etcd-guard-master1.ocp4.infrahub.com                              1/1   Terminating                  0                 24d
+openshift-gitops-operator                          openshift-gitops-operator-controller-manager-6d988d6586-pd4nz     2/2   Terminating                  300 (5d15h ago)   9d
+openshift-gitops                                   cluster-549ff58c8b-rq2dv                                          1/1   Terminating                  0                 9d
+openshift-image-registry                           cluster-image-registry-operator-64d76b8897-9dm78                  0/1   ContainerCreating            0                 3d22h
+openshift-ingress-operator                         ingress-operator-9856f77b-wpb9g                                   2/2   Terminating                  4 (24d ago)       24d
+openshift-insights                                 insights-operator-f7cff5f8d-2jwd7                                 0/1   ContainerCreating            0                 4d19h
+openshift-insights                                 insights-operator-f7cff5f8d-hsxqr                                 1/1   Terminating                  1 (24d ago)       24d
+openshift-kube-apiserver-operator                  kube-apiserver-operator-5668d9f95b-dgj29                          1/1   Terminating                  11 (6d ago)       24d
+openshift-kube-apiserver-operator                  kube-apiserver-operator-5668d9f95b-k8vz2                          0/1   ContainerCreating            0                 4d19h
+openshift-kube-apiserver                           kube-apiserver-guard-master1.ocp4.infrahub.com                    1/1   Terminating                  0                 24d
+openshift-kube-controller-manager-operator         kube-controller-manager-operator-6c58fbc488-26759                 1/1   Terminating                  7 (6d ago)        24d
+openshift-kube-controller-manager-operator         kube-controller-manager-operator-6c58fbc488-khfqt                 0/1   ContainerCreating            0                 4d19h
+openshift-kube-controller-manager                  kube-controller-manager-guard-master1.ocp4.infrahub.com           0/1   Terminating                  0                 24d
+openshift-kube-scheduler-operator                  openshift-kube-scheduler-operator-555654dffc-rkgsw                1/1   Terminating                  9 (6d ago)        24d
+openshift-kube-scheduler-operator                  openshift-kube-scheduler-operator-555654dffc-x99vt                0/1   ContainerCreating            0                 4d19h
+openshift-kube-scheduler                           openshift-kube-scheduler-guard-master1.ocp4.infrahub.com          1/1   Terminating                  0                 24d
+openshift-kube-storage-version-migrator-operator   kube-storage-version-migrator-operator-67848b95c6-45xmp           0/1   ContainerCreating            0                 4d19h
+openshift-kube-storage-version-migrator-operator   kube-storage-version-migrator-operator-67848b95c6-7jdcr           1/1   Terminating                  9 (6d2h ago)      24d
+openshift-kube-storage-version-migrator            migrator-67f5455b55-j297c                                         2/2   Terminating                  0                 24d
+openshift-machine-api                              cluster-autoscaler-operator-8c67d99b7-99s2c                       0/2   ContainerCreating            0                 4d19h
+openshift-machine-api                              cluster-autoscaler-operator-8c67d99b7-jfkql                       2/2   Terminating                  8 (5d17h ago)     24d
+openshift-machine-api                              cluster-baremetal-operator-54f8bd449c-t5tfh                       2/2   Terminating                  6 (6d8h ago)      24d
+openshift-machine-api                              cluster-baremetal-operator-54f8bd449c-zwhp7                       0/2   ContainerCreating            0                 4d19h
+openshift-machine-api                              control-plane-machine-set-operator-54dd9d5ff-q4fsw                1/1   Terminating                  4 (6d5h ago)      24d
+openshift-machine-api                              machine-api-operator-7466d6dff8-b5n8g                             0/2   ContainerCreating            0                 4d19h
+openshift-machine-api                              machine-api-operator-7466d6dff8-qqgj4                             2/2   Terminating                  4 (5d23h ago)     24d
+openshift-machine-config-operator                  machine-config-operator-74ccbcffcd-9w6cb                          1/1   Terminating                  3 (6d8h ago)      24d
+openshift-marketplace                              certified-operators-wtz7s                                         0/1   Init:0/2                     0                 4d1h
+openshift-marketplace                              community-operators-k9bwl                                         0/1   Init:0/2                     0                 4d1h
+openshift-marketplace                              redhat-marketplace-s2xs6                                          0/1   Init:0/2                     0                 4d1h
+openshift-marketplace                              redhat-operators-n9dnt                                            0/1   Init:0/2                     0                 4d1h
+openshift-monitoring                               cluster-monitoring-operator-67d475fcb9-dfjqd                      1/1   Terminating                  0                 24d
+openshift-monitoring                               metrics-server-5c6b85cf7d-m6psb                                   0/1   Terminating                  190 (5d15h ago)   9d
+openshift-monitoring                               prometheus-k8s-0                                                  5/6   Terminating                  176 (5d15h ago)   6d17h
+openshift-multus                                   multus-admission-controller-7c7567d97-62xrp                       0/2   ContainerCreating            0                 4d19h
+openshift-multus                                   multus-admission-controller-7c7567d97-fkccz                       2/2   Terminating                  0                 24d
+openshift-network-console                          networking-console-plugin-84c97d868d-hs7rk                        1/1   Terminating                  0                 6d17h
+openshift-network-operator                         network-operator-cb5d8454c-5x85f                                  1/1   Terminating                  16 (5d17h ago)    24d
+openshift-oauth-apiserver                          apiserver-6846c8d6c-ff62s                                         0/1   Init:0/1                     0                 4d20h
+openshift-operator-controller                      operator-controller-controller-manager-d55fb6bf8-dwd5m            0/1   ContainerCreating            0                 4d19h
+openshift-operator-controller                      operator-controller-controller-manager-d55fb6bf8-r59zx            0/1   Terminating                  79 (5d16h ago)    24d
+openshift-operator-lifecycle-manager               catalog-operator-59784bbfdd-t22tr                                 0/1   Terminating                  195 (5d16h ago)   24d
+openshift-operator-lifecycle-manager               olm-operator-7d66bb59c-ksl66                                      0/1   Terminating                  210 (5d16h ago)   24d
+openshift-operator-lifecycle-manager               package-server-manager-656788b567-f7q2r                           1/2   Terminating                  109 (5d16h ago)   24d
+openshift-operator-lifecycle-manager               packageserver-5bd6968986-4v8rk                                    0/1   Terminating                  309 (5d15h ago)   24d
+openshift-operator-lifecycle-manager               packageserver-5bd6968986-px7vl                                    0/1   ContainerCreating            0                 4d19h
+openshift-ovn-kubernetes                           ovnkube-control-plane-6dfc5c6fb-dvfxl                             2/2   Terminating                  7 (6d8h ago)      24d
+openshift-ovn-kubernetes                           ovnkube-control-plane-6dfc5c6fb-mdgnr                             0/2   ContainerCreating            0                 4d20h
+openshift-route-controller-manager                 route-controller-manager-5987b74b7b-7bpwv                         0/1   Pending                      0                 4d19h
+openshift-route-controller-manager                 route-controller-manager-5987b74b7b-7kvfm                         0/1   Terminating                  0                 5d14h
+openshift-route-controller-manager                 route-controller-manager-5987b74b7b-s9s8p                         0/1   Terminating                  221 (5d16h ago)   9d
+openshift-route-controller-manager                 route-controller-manager-5987b74b7b-w2pzt                         0/1   Pending                      0                 4d20h
+openshift-service-ca-operator                      service-ca-operator-8556d5bcf9-nlqhz                              1/1   Terminating                  5 (6d8h ago)      24d
+openshift-service-ca                               service-ca-6897d9dd54-26bfv                                       1/1   Terminating                  6 (6d8h ago)      24d
+openshift-storage                                  rook-ceph-operator-7959499b8-f2tnv                                0/1   CreateContainerConfigError   0                 4d1h
+
+====================
+7. KAFKA RESOURCES
+====================
+NAME              READY   WARNINGS   KAFKA VERSION   METADATA VERSION
+lakehouse-kafka   True    True       4.1.0           4.1-IV1
+
+NAME                         CLUSTER           PARTITIONS   REPLICATION FACTOR   READY
+audit-trail                  lakehouse-kafka   6            3                    True
+audit-trail-dlq              lakehouse-kafka   3            3                    True
+fraud-decisions              lakehouse-kafka   6            3                    True
+fraud-decisions-dlq          lakehouse-kafka   3            3                    True
+fraud-scores                 lakehouse-kafka   6            3                    True
+fraud-scores-dlq             lakehouse-kafka   3            3                    True
+transactions-enriched        lakehouse-kafka   6            3                    True
+transactions-enriched-dlq    lakehouse-kafka   3            3                    True
+transactions-raw             lakehouse-kafka   12           3                    True
+transactions-raw-dlq         lakehouse-kafka   3            3                    True
+transactions-validated       lakehouse-kafka   6            3                    True
+transactions-validated-dlq   lakehouse-kafka   3            3                    True
+
+Kafka topic count:
+12
+
+====================
+8. SPARK RESOURCES
+====================
+
+NAME                                        READY   STATUS      RESTARTS   AGE     IP            NODE                        NOMINATED NODE   READINESS GATES
+fraud-spark-1-build                         0/1     Completed   0          3d22h   10.130.2.32   worker5.ocp4.infrahub.com   <none>           <none>
+spark-operator-controller-d69585597-kn7hn   1/1     Running     0          4d3h    10.130.2.17   worker5.ocp4.infrahub.com   <none>           <none>
+spark-operator-webhook-7944f988fc-4s85m     1/1     Running     0          4d3h    10.131.2.22   worker2.ocp4.infrahub.com   <none>           <none>
+
+====================
+9. AIRFLOW
+====================
+NAME                                     READY   STATUS    RESTARTS   AGE   IP             NODE                        NOMINATED NODE   READINESS GATES
+airflow-api-server-66666d9c89-6vsff      1/1     Running   0          46h   10.129.4.195   worker3.ocp4.infrahub.com   <none>           <none>
+airflow-dag-processor-6d65745674-tqv57   2/2     Running   0          20h   10.129.5.6     worker3.ocp4.infrahub.com   <none>           <none>
+airflow-scheduler-0                      2/2     Running   0          20h   10.130.2.151   worker5.ocp4.infrahub.com   <none>           <none>
+
+NAME                                 READY   AGE
+statefulset.apps/airflow-scheduler   1/1     3d23h
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/airflow-api-server      1/1     1            1           17d
+deployment.apps/airflow-dag-processor   1/1     1            1           17d
+deployment.apps/airflow-statsd          0/0     0            0           17d
+
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/airflow-api-server   ClusterIP   172.30.26.98     <none>        8080/TCP            17d
+service/airflow-scheduler    ClusterIP   None             <none>        8793/TCP            17d
+service/airflow-statsd       ClusterIP   172.30.109.240   <none>        9125/UDP,9102/TCP   17d
+
+Airflow DAG files if accessible:
+total 24K
+drwxr-sr-x. 2   65533 root  174 May  9 13:54 .
+drwxrwxr-x. 1 airflow root   60 May  9 13:54 ..
+-rw-r--r--. 1   65533 root    0 May  9 13:54 .gitkeep
+-rw-r--r--. 1   65533 root 6.8K May  9 13:54 dag1_silver_writer.py
+-rw-r--r--. 1   65533 root 3.7K May  9 13:54 dag2_daily_summary.py
+-rw-r--r--. 1   65533 root 2.6K May  9 13:54 dag3_rule_performance.py
+-rw-r--r--. 1   65533 root 2.3K May  9 13:54 dag4_uid_risk_profile.py
+-rw-r--r--. 1   65533 root 2.2K May  9 13:54 dag5_hourly_pattern.py
+
+====================
+10. TRINO
+====================
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/trino-55c9f59955-8qx9d   1/1     Running   0          3d21h
+
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/trino   ClusterIP   172.30.192.77   <none>        8080/TCP   20d
+
+NAME                             HOST/PORT                            PATH   SERVICES   PORT   TERMINATION   WILDCARD
+route.route.openshift.io/trino   trino-trino.apps.ocp4.infrahub.com          trino      8080   edge          None
+
+TRINO_POD=trino-55c9f59955-8qx9d
+
+Trino catalogs:
+May 10, 2026 9:56:31 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"hive"
+"iceberg"
+"jmx"
+"memory"
+"system"
+"tpcds"
+"tpch"
+
+Trino schemas in iceberg:
+May 10, 2026 9:56:33 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"default"
+"information_schema"
+"warehouse_bronze"
+"warehouse_gold"
+"warehouse_silver"
+
+Bronze count:
+May 10, 2026 9:56:35 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"590540"
+
+Silver decisions count:
+May 10, 2026 9:56:37 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"994376"
+
+Silver transactions count:
+May 10, 2026 9:56:39 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"994376"
+
+Gold daily summary count:
+May 10, 2026 9:56:41 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"182"
+
+Gold UID risk profile count:
+May 10, 2026 9:56:43 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"37531"
+
+Gold hourly pattern count:
+May 10, 2026 9:56:46 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"24"
+
+Gold rule performance count:
+May 10, 2026 9:56:48 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"8"
+
+Fraud summary numbers:
+May 10, 2026 9:56:50 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+Query 20260510_095650_03739_euzkp failed: line 2:11: Column 'transaction_count' cannot be resolved
+LINE 2:       sum(transaction_count) AS total_transactions,
+                  ^
+
+command terminated with exit code 1
+
+Latest daily summaries:
+May 10, 2026 9:56:52 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+"2018-05-31","2754","472199.8159999991","119","22012.04","0.043209876543209874","184.9751260504202","1224.0","0","","2026-05-09 18:13:14.584000 UTC"
+"2018-05-30","2739","422578.5439999989","122","22235.703","0.04454180357794816","182.25986065573773","1436.0","0","","2026-05-09 18:13:14.584000 UTC"
+"2018-05-29","2618","401072.0749999992","98","15711.020999999999","0.0374331550802139","160.31654081632652","2480.06","0","","2026-05-09 18:13:14.584000 UTC"
+"2018-05-28","2177","242488.95100000003","66","17596.851000000002","0.03031694993109784","266.6189545454546","2680.0","0","","2026-05-09 18:13:14.584000 UTC"
+"2018-05-27","2068","221811.80800000005","88","15779.978000000001","0.0425531914893617","179.31793181818182","1651.0","0","","2026-05-09 18:13:14.584000 UTC"
+
+====================
+11. MINIO / STORAGE
+====================
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/minio-7585647956-q9ndj   1/1     Running   0          5d15h
+
+NAME                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/minio           ClusterIP   172.30.113.234   <none>        9000/TCP   21d
+service/minio-console   ClusterIP   172.30.195.29    <none>        9001/TCP   21d
+
+NAME                                     HOST/PORT                                    PATH   SERVICES        PORT   TERMINATION   WILDCARD
+route.route.openshift.io/minio-console   minio-console-minio.apps.ocp4.infrahub.com          minio-console   9001   edge          None
+
+NAME                          STATUS   VOLUME              CAPACITY   ACCESS MODES   STORAGECLASS    VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/minio   Bound    local-pv-cab4826a   50Gi       RWO            local-storage   <unset>                 20d
+
+airflow           airflow-logs                            Bound         pvc-a0bcaf93-5313-42ca-99bb-974d067b06fc   100Gi      RWX            rook-cephfs       <unset>                 3d23h
+kafka             data-lakehouse-kafka-kafka-nodepool-0   Bound         pvc-c4a6efd5-94a3-43e3-afbe-19055e2e07fa   10Gi       RWO            rook-ceph-block   <unset>                 4d1h
+kafka             data-lakehouse-kafka-kafka-nodepool-1   Bound         pvc-4cd52ecd-9cc2-4673-823d-a325996ce533   10Gi       RWO            rook-ceph-block   <unset>                 4d1h
+kafka             data-lakehouse-kafka-kafka-nodepool-2   Bound         pvc-a49be1c7-4c3c-43c1-a830-f834996d7eef   10Gi       RWO            rook-ceph-block   <unset>                 4d1h
+minio             minio                                   Bound         local-pv-cab4826a                          50Gi       RWO            local-storage     <unset>                 20d
+nifi              nifi-data                               Bound         pvc-f643b6f8-0d7a-4fcd-b10a-a91c5c43c8bd   5Gi        RWO            rook-ceph-block   <unset>                 4d1h
+postgresql        data-postgresql-0                       Bound         pvc-a2b10e93-befb-4a7b-834b-e1a5a815f241   50Gi       RWO            rook-ceph-block   <unset>                 4d1h
+schema-registry   schema-registry-postgres-data           Terminating   pvc-4aa45e05-7fc2-4ce4-b4ee-6e493680c0f0   5Gi        RWO            rook-ceph-block   <unset>                 4d1h
+
+NAME                             PROVISIONER                                                     RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+local-path (default)             cluster.local/local-path-provisioner                            Delete          WaitForFirstConsumer   true                   20d
+local-path-immediate (default)   cluster.local/local-path-provisioner                            Delete          Immediate              true                   20d
+local-storage                    kubernetes.io/no-provisioner                                    Delete          Immediate              false                  20d
+nfs-storage                      cluster.local/nfs-provisioner-nfs-subdir-external-provisioner   Delete          Immediate              true                   20d
+rook-ceph-block                  rook-ceph.rbd.csi.ceph.com                                      Delete          WaitForFirstConsumer   true                   4d1h
+rook-cephfs                      rook-ceph.cephfs.csi.ceph.com                                   Delete          WaitForFirstConsumer   true                   4d1h
+
+====================
+12. HIVE METASTORE
+====================
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/hive-metastore-5cdcdc95bf-6vk5c   1/1     Running   0          47h
+
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/hive-metastore   ClusterIP   172.30.228.150   <none>        9083/TCP   20d
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hive-metastore   1/1     1            1           20d
+
+NAME                       ENDPOINTS           AGE
+endpoints/hive-metastore   10.131.2.176:9083   20d
+
+====================
+13. SCHEMA REGISTRY
+====================
+NAME                                            READY   STATUS    RESTARTS         AGE
+pod/apicurio-registry-7c8864f4dc-vvfbz          1/1     Running   468 (4d1h ago)   5d15h
+pod/schema-registry-postgres-59c555747d-gmq8m   1/1     Running   0                3d21h
+
+NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/apicurio-registry          ClusterIP   172.30.95.251    <none>        8080/TCP   12d
+service/schema-registry-postgres   ClusterIP   172.30.211.109   <none>        5432/TCP   12d
+
+====================
+14. VAULT / SECRETS OPERATOR
+====================
+NAME          READY   STATUS    RESTARTS   AGE
+pod/vault-0   1/1     Running   0          4d4h
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+service/vault            ClusterIP   172.30.214.18   <none>        8200/TCP,8201/TCP   19d
+service/vault-internal   ClusterIP   None            <none>        8200/TCP,8201/TCP   19d
+service/vault-ui         ClusterIP   172.30.175.17   <none>        8200/TCP            19d
+
+NAME                             HOST/PORT                      PATH   SERVICES   PORT   TERMINATION     WILDCARD
+route.route.openshift.io/vault   vault.apps.ocp4.infrahub.com          vault      8200   edge/Redirect   None
+
+NAMESPACE   NAME                                                     HEALTHY   READY   AGE
+vault       vaultconnection.secrets.hashicorp.com/vault-connection   True      True    19d
+
+NAMESPACE   NAME                                         HEALTHY   READY   AGE
+vault       vaultauth.secrets.hashicorp.com/vault-auth   True      True    19d
+
+NAMESPACE    NAME                                                        SYNCED   HEALTHY   READY   AGE
+minio        vaultstaticsecret.secrets.hashicorp.com/minio-secret        False    False     False   19d
+nifi         vaultstaticsecret.secrets.hashicorp.com/nifi-secret         False    False     False   19d
+postgresql   vaultstaticsecret.secrets.hashicorp.com/postgresql-secret   False    False     False   19d
+superset     vaultstaticsecret.secrets.hashicorp.com/superset-secret     False    False     False   19d
+
+====================
+15. MONITORING
+====================
+NAME                                                          READY   STATUS        RESTARTS          AGE
+pod/grafana-deployment-74877f4c9d-db98z                       1/1     Running       0                 12h
+pod/grafana-operator-controller-manager-v5-8494f5dbfd-9ghhp   1/1     Terminating   252 (5d15h ago)   10d
+pod/grafana-operator-controller-manager-v5-8494f5dbfd-hqprb   1/1     Running       0                 4d20h
+
+NAME                                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/grafana-alerting                            ClusterIP   None             <none>        9094/TCP            19d
+service/grafana-operator-operator-metrics-service   ClusterIP   172.30.212.246   <none>        9090/TCP,8888/TCP   19d
+service/grafana-service                             ClusterIP   172.30.70.72     <none>        3000/TCP            19d
+
+NAME                               HOST/PORT                                   PATH   SERVICES          PORT   TERMINATION     WILDCARD
+route.route.openshift.io/grafana   grafana-monitoring.apps.ocp4.infrahub.com          grafana-service   3000   edge/Redirect   None
+
+NAMESPACE                                    NAME                                           AGE
+airflow                                      airflow                                        14d
+kafka                                        fraud-metrics-exporter                         13h
+trino                                        trino                                          19d
+
+NAMESPACE                                    NAME                                           AGE
+kafka                                        fraud-platform-alerts                          44m
+
+Fraud alert rule file in repo:
+platform/monitoring/fraud-platform-alerts.yaml:13:        - alert: FraudRateSpikeDetected
+platform/monitoring/fraud-platform-alerts.yaml:23:        - alert: FraudPipelineDLQNonZero
+platform/monitoring/fraud-platform-alerts.yaml:33:        - alert: KafkaBrokerDown
+platform/monitoring/fraud-platform-alerts.yaml:43:        - alert: SparkExecutorOOM
+platform/monitoring/fraud-platform-alerts.yaml:131:        - alert: HiveMetastoreDown
+platform/monitoring/fraud-platform-alerts.yaml:142:        - alert: TrinoDown
+
+====================
+16. FRAUD METRICS EXPORTER
+====================
+NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/fraud-metrics-exporter             1/1     1            1           13h
+NAME                                                    READY   STATUS      RESTARTS       AGE
+pod/fraud-metrics-exporter-d6ff854b7-c9fgq              1/1     Running     0              13h
+NAME                                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                               AGE
+service/fraud-metrics-exporter            ClusterIP   172.30.180.52   <none>        9090/TCP                              13h
+NAME                                                          AGE
+servicemonitor.monitoring.coreos.com/fraud-metrics-exporter   13h
+
+Exporter metrics:
+executable file `curl` not found in $PATH: No such file or directory
+command terminated with exit code 1
+
+====================
+17. GRAFANA / SUPERSET
+====================
+NAME                                                          READY   STATUS        RESTARTS          AGE
+pod/grafana-deployment-74877f4c9d-db98z                       1/1     Running       0                 12h
+pod/grafana-operator-controller-manager-v5-8494f5dbfd-9ghhp   1/1     Terminating   252 (5d15h ago)   10d
+pod/grafana-operator-controller-manager-v5-8494f5dbfd-hqprb   1/1     Running       0                 4d20h
+NAME                                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/grafana-alerting                            ClusterIP   None             <none>        9094/TCP            19d
+service/grafana-operator-operator-metrics-service   ClusterIP   172.30.212.246   <none>        9090/TCP,8888/TCP   19d
+service/grafana-service                             ClusterIP   172.30.70.72     <none>        3000/TCP            19d
+NAME                               HOST/PORT                                   PATH   SERVICES          PORT   TERMINATION     WILDCARD
+route.route.openshift.io/grafana   grafana-monitoring.apps.ocp4.infrahub.com          grafana-service   3000   edge/Redirect   None
+
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/superset-5b4c64b79d-797pw   1/1     Running   0          19h
+
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/superset   ClusterIP   172.30.48.208   <none>        8088/TCP   19d
+
+NAME                                HOST/PORT                                  PATH   SERVICES   PORT   TERMINATION     WILDCARD
+route.route.openshift.io/superset   superset-superset.apps.ocp4.infrahub.com          superset   http   edge/Redirect   None
+
+====================
+18. PLATFORM COMMAND UI
+====================
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/command-api-6865894bbf-fs76g   1/1     Running   0          11h
+pod/command-ui-5665bdc7dd-wzft8    1/1     Running   0          10h
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/command-api   1/1     1            1           12h
+deployment.apps/command-ui    1/1     1            1           12h
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/command-api   ClusterIP   172.30.31.200   <none>        8080/TCP   12h
+service/command-ui    ClusterIP   172.30.202.20   <none>        8080/TCP   12h
+
+NAME                                  HOST/PORT                                               PATH   SERVICES     PORT   TERMINATION   WILDCARD
+route.route.openshift.io/command-ui   command-ui-platform-command-ui.apps.ocp4.infrahub.com          command-ui   8080                 None
+
+NAME                         SECRETS   AGE
+serviceaccount/builder       1         12h
+serviceaccount/command-api   1         11h
+serviceaccount/default       1         12h
+serviceaccount/deployer      1         12h
+
+NAME                                                          ROLE                               AGE
+rolebinding.rbac.authorization.k8s.io/admin                   ClusterRole/admin                  12h
+rolebinding.rbac.authorization.k8s.io/system:deployers        ClusterRole/system:deployer        12h
+rolebinding.rbac.authorization.k8s.io/system:image-builders   ClusterRole/system:image-builder   12h
+rolebinding.rbac.authorization.k8s.io/system:image-pullers    ClusterRole/system:image-puller    12h
+
+NAME                                                                                                                      ROLE                                                                                    AGE
+clusterrolebinding.rbac.authorization.k8s.io/airflow-platform-reader                                                      ClusterRole/airflow-platform-reader                                                     19h
+clusterrolebinding.rbac.authorization.k8s.io/alertmanager-main                                                            ClusterRole/alertmanager-main                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/basic-users                                                                  ClusterRole/basic-user                                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/catalogd-manager-rolebinding                                                 ClusterRole/catalogd-manager-role                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/catalogd-proxy-rolebinding                                                   ClusterRole/catalogd-proxy-role                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/cephfs-csi-nodeplugin-role                                                   ClusterRole/cephfs-csi-nodeplugin                                                       4d1h
+clusterrolebinding.rbac.authorization.k8s.io/cephfs-csi-provisioner-role                                                  ClusterRole/cephfs-external-provisioner-runner                                          4d1h
+clusterrolebinding.rbac.authorization.k8s.io/cloud-controller-manager                                                     ClusterRole/cloud-controller-manager                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/cloud-credential-operator-rolebinding                                        ClusterRole/cloud-credential-operator-role                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/cloud-node-manager                                                           ClusterRole/cloud-node-manager                                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-admin                                                                ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-0                                                              ClusterRole/cluster-admin                                                               21d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-1                                                              ClusterRole/cluster-admin                                                               21d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-admins                                                               ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-autoscaler                                                           ClusterRole/cluster-autoscaler                                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-autoscaler-operator                                                  ClusterRole/cluster-autoscaler-operator                                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-baremetal-operator                                                   ClusterRole/cluster-baremetal-operator                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-monitoring-operator                                                  ClusterRole/cluster-monitoring-operator                                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-monitoring-view                                                      ClusterRole/cluster-monitoring-view                                                     11h
+clusterrolebinding.rbac.authorization.k8s.io/cluster-network-operator                                                     ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-node-tuning-operator                                                 ClusterRole/cluster-node-tuning-operator                                                24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-node-tuning:tuned                                                    ClusterRole/cluster-node-tuning:tuned                                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-olm-operator-role                                                    ClusterRole/cluster-olm-operator                                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-readers                                                              ClusterRole/cluster-reader                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-samples-operator                                                     ClusterRole/cluster-samples-operator                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-samples-operator-imageconfig-reader                                  ClusterRole/cluster-samples-operator-imageconfig-reader                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-samples-operator-proxy-reader                                        ClusterRole/cluster-samples-operator-proxy-reader                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-status-binding                                                       ClusterRole/cluster-status                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-storage-operator-role                                                ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/cluster-version-operator                                                     ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/command-api-monitoring-view                                                  ClusterRole/cluster-monitoring-view                                                     11h
+clusterrolebinding.rbac.authorization.k8s.io/console                                                                      ClusterRole/console                                                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/console-auth-delegator                                                       ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/console-extensions-reader                                                    ClusterRole/console-extensions-reader                                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/console-operator                                                             ClusterRole/console-operator                                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/console-operator-auth-delegator                                              ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/control-plane-machine-set-operator                                           ClusterRole/control-plane-machine-set-operator                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/csi-snapshot-controller-operator-clusterrole                                 ClusterRole/csi-snapshot-controller-operator-clusterrole                                24d
+clusterrolebinding.rbac.authorization.k8s.io/csi-snapshot-controller-runner-operator                                      ClusterRole/openshift-csi-snapshot-controller-runner                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/custom-account-openshift-machine-config-operator                             ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/default-account-cluster-image-registry-operator                              ClusterRole/cluster-image-registry-operator                                             24d
+clusterrolebinding.rbac.authorization.k8s.io/dns-monitoring                                                               ClusterRole/dns-monitoring                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/gitops-service-cluster                                                       ClusterRole/gitops-service-cluster                                                      21d
+clusterrolebinding.rbac.authorization.k8s.io/grafana-cluster-monitoring-view                                              ClusterRole/cluster-monitoring-view                                                     19d
+clusterrolebinding.rbac.authorization.k8s.io/grafana-operator.v5.22.2-abQ3tNkQg7qFHa35iOVykzZHz9WQFvLaeFnvHd              ClusterRole/grafana-operator.v5.22.2-abQ3tNkQg7qFHa35iOVykzZHz9WQFvLaeFnvHd             19d
+clusterrolebinding.rbac.authorization.k8s.io/helm-chartrepos-view                                                         ClusterRole/helm-chartrepos-viewer                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/insights-operator                                                            ClusterRole/insights-operator                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/insights-operator-auth                                                       ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/insights-operator-gather                                                     ClusterRole/insights-operator-gather                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/insights-operator-gather-reader                                              ClusterRole/cluster-reader                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/insights-runtime-extractor                                                   ClusterRole/insights-runtime-extractor-role                                             24d
+clusterrolebinding.rbac.authorization.k8s.io/keycloak-operator.v26.6.1-3RJ4aoffuHTPbvGqkri98XFSj0yj0stc2XcDXH             ClusterRole/keycloak-operator.v26.6.1-3RJ4aoffuHTPbvGqkri98XFSj0yj0stc2XcDXH            7d3h
+clusterrolebinding.rbac.authorization.k8s.io/kube-apiserver                                                               ClusterRole/kube-apiserver                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/kube-state-metrics                                                           ClusterRole/kube-state-metrics                                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/local-path-provisioner                                                       ClusterRole/local-path-provisioner                                                      20d
+clusterrolebinding.rbac.authorization.k8s.io/local-storage-operator.v-2iWzvEbDZ9lsOnGwvTKN4Hu2VwCRsoE1dbAelQ              ClusterRole/local-storage-operator.v-2iWzvEbDZ9lsOnGwvTKN4Hu2VwCRsoE1dbAelQ             12d
+clusterrolebinding.rbac.authorization.k8s.io/local-storage-operator.v-5H0W5QAqYNU8hvxd90Id2iUwsNea2k9aqzTMUo              ClusterRole/local-storage-operator.v-5H0W5QAqYNU8hvxd90Id2iUwsNea2k9aqzTMUo             12d
+clusterrolebinding.rbac.authorization.k8s.io/machine-api-controllers                                                      ClusterRole/machine-api-controllers                                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-api-controllers-baremetal                                            ClusterRole/machine-api-controllers-metal3-remediation                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-api-operator                                                         ClusterRole/machine-api-operator                                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-api-operator-ext-remediation                                         ClusterRole/machine-api-operator-ext-remediation                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-config-controller                                                    ClusterRole/machine-config-controller                                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-config-daemon                                                        ClusterRole/machine-config-daemon                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-config-server                                                        ClusterRole/machine-config-server                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-os-builder                                                           ClusterRole/machine-os-builder                                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/machine-os-builder-anyuid                                                    ClusterRole/system:openshift:scc:anyuid                                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/marketplace-operator                                                         ClusterRole/marketplace-operator                                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/metrics-daemon-sa-rolebinding                                                ClusterRole/metrics-daemon-role                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator                                         ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-admission-controller-webhook                                          ClusterRole/multus-admission-controller-webhook                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-ancillary-tools                                                       ClusterRole/multus-ancillary-tools                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-cluster-readers                                                       ClusterRole/multus-ancillary-tools                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-group                                                                 ClusterRole/multus                                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-transient                                                             ClusterRole/multus-ancillary-tools                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/multus-whereabouts                                                           ClusterRole/whereabouts-cni                                                             24d
+clusterrolebinding.rbac.authorization.k8s.io/network-diagnostics                                                          ClusterRole/network-diagnostics                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/network-node-identity                                                        ClusterRole/network-node-identity                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/nfs-provisioner-hostmount-anyuid                                             ClusterRole/system:openshift:scc:hostmount-anyuid                                       20d
+clusterrolebinding.rbac.authorization.k8s.io/nifi-anyuid                                                                  ClusterRole/system:openshift:scc:anyuid                                                 20d
+clusterrolebinding.rbac.authorization.k8s.io/node-exporter                                                                ClusterRole/node-exporter                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/objectstorage-provisioner-role-binding                                       ClusterRole/objectstorage-provisioner-role                                              4d1h
+clusterrolebinding.rbac.authorization.k8s.io/olm-operator-binding-openshift-operator-lifecycle-manager                    ClusterRole/system:controller:operator-lifecycle-manager                                24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-csi-snapshot-controller-role                                       ClusterRole/openshift-csi-snapshot-controller-runner                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-dns                                                                ClusterRole/openshift-dns                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-dns-operator                                                       ClusterRole/openshift-dns-operator                                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-openshift-gitops-argocd-application-controller              ClusterRole/openshift-gitops-openshift-gitops-argocd-application-controller             21d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-openshift-gitops-argocd-applicationset-controller           ClusterRole/openshift-gitops-openshift-gitops-argocd-applicationset-controller          21d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-openshift-gitops-argocd-server                              ClusterRole/openshift-gitops-openshift-gitops-argocd-server                             21d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-operato-7dZc96pdcBCF2yHlvLNpxsecf0Tq8kgH84Jkxl              ClusterRole/openshift-gitops-operato-7dZc96pdcBCF2yHlvLNpxsecf0Tq8kgH84Jkxl             9d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-operato-a0gyMWhYoM6dTfp1shoVbX5jacJoUbokWOlgx7              ClusterRole/openshift-gitops-operato-a0gyMWhYoM6dTfp1shoVbX5jacJoUbokWOlgx7             9d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-gitops-operator-controller-manager-service-system:auth-delegator   ClusterRole/system:auth-delegator                                                       21d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-image-registry-pruner                                              ClusterRole/system:image-pruner                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-ingress-operator                                                   ClusterRole/openshift-ingress-operator                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-ingress-router                                                     ClusterRole/openshift-ingress-router                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-iptables-alerter                                                   ClusterRole/openshift-iptables-alerter                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-ovn-kubernetes-control-plane-limited                               ClusterRole/openshift-ovn-kubernetes-control-plane-limited                              24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-ovn-kubernetes-node-identity-limited                               ClusterRole/openshift-ovn-kubernetes-node-limited                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-ovn-kubernetes-node-kube-rbac-proxy                                ClusterRole/openshift-ovn-kubernetes-kube-rbac-proxy                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/openshift-state-metrics                                                      ClusterRole/openshift-state-metrics                                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/openstack-cloud-controller-manager                                           ClusterRole/openstack-cloud-controller-manager                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/operator-controller-manager-rolebinding                                      ClusterRole/operator-controller-manager-role                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/operator-controller-proxy-rolebinding                                        ClusterRole/operator-controller-proxy-role                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/operator-lifecycle-manager-metrics-reader                                    ClusterRole/operator-lifecycle-manager-metrics-reader                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/packageserver-service-system:auth-delegator                                  ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-k8s                                                               ClusterRole/prometheus-k8s                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-k8s-scheduler-resources                                           ClusterRole/prometheus-k8s-scheduler-resources                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator                                                          ClusterRole/prometheus-operator                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-user-workload                                                     ClusterRole/prometheus-user-workload                                                    19d
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-user-workload-operator                                            ClusterRole/prometheus-user-workload-operator                                           19d
+clusterrolebinding.rbac.authorization.k8s.io/rbd-csi-nodeplugin                                                           ClusterRole/rbd-csi-nodeplugin                                                          4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rbd-csi-provisioner-role                                                     ClusterRole/rbd-external-provisioner-runner                                             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/registry-monitoring                                                          ClusterRole/registry-monitoring                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/registry-registry-role                                                       ClusterRole/system:registry                                                             20d
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-global                                                             ClusterRole/rook-ceph-global                                                            4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-mgr-cluster                                                        ClusterRole/rook-ceph-mgr-cluster                                                       4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-object-bucket                                                      ClusterRole/rook-ceph-object-bucket                                                     4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-1ERtUGQ561gECntWawZEpW86RoDa6DikaR4BZ8              ClusterRole/rook-ceph-operator.v4.21-1ERtUGQ561gECntWawZEpW86RoDa6DikaR4BZ8             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-695Us1BSOrc4IeWjGi7jco4amNliWSGaZPb0j7              ClusterRole/rook-ceph-operator.v4.21-695Us1BSOrc4IeWjGi7jco4amNliWSGaZPb0j7             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-8GguR6dInu1NDMX1aFXDspXnpDrPhACIfwv0YO              ClusterRole/rook-ceph-operator.v4.21-8GguR6dInu1NDMX1aFXDspXnpDrPhACIfwv0YO             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-8ocGxMOWiwvKZ7uNwR9tpdCDBmOnNPu7LM6nOa              ClusterRole/rook-ceph-operator.v4.21-8ocGxMOWiwvKZ7uNwR9tpdCDBmOnNPu7LM6nOa             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-aM015CAzBEnEIuHJlNt6Pr7z0AKQc7CFRX1sNl              ClusterRole/rook-ceph-operator.v4.21-aM015CAzBEnEIuHJlNt6Pr7z0AKQc7CFRX1sNl             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-aeJnDBPNFYjBtHTWSdtFePYpPwjPsKxKzoQILu              ClusterRole/rook-ceph-operator.v4.21-aeJnDBPNFYjBtHTWSdtFePYpPwjPsKxKzoQILu             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-bTTi6AHmx0t0U7pH97xtgroC5jfEKYkVk7NOqA              ClusterRole/rook-ceph-operator.v4.21-bTTi6AHmx0t0U7pH97xtgroC5jfEKYkVk7NOqA             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-cCtDJd6EXApvvmMKQsGmSMQtfAZwp8EuRHAwkF              ClusterRole/rook-ceph-operator.v4.21-cCtDJd6EXApvvmMKQsGmSMQtfAZwp8EuRHAwkF             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-cHLxUp0RfJzGRZbkr2HHBfMDUFGc2kY0jkfIER              ClusterRole/rook-ceph-operator.v4.21-cHLxUp0RfJzGRZbkr2HHBfMDUFGc2kY0jkfIER             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-operator.v4.21-chufgGuLMcDsKZOvvfBpNSJhaLLDV4ylFsQ4AN              ClusterRole/rook-ceph-operator.v4.21-chufgGuLMcDsKZOvvfBpNSJhaLLDV4ylFsQ4AN             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-osd                                                                ClusterRole/rook-ceph-osd                                                               4d1h
+clusterrolebinding.rbac.authorization.k8s.io/rook-ceph-system                                                             ClusterRole/rook-ceph-system                                                            4d1h
+clusterrolebinding.rbac.authorization.k8s.io/router-monitoring                                                            ClusterRole/router-monitoring                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/run-nfs-provisioner-nfs-subdir-external-provisioner                          ClusterRole/nfs-provisioner-nfs-subdir-external-provisioner-runner                      20d
+clusterrolebinding.rbac.authorization.k8s.io/self-access-reviewers                                                        ClusterRole/self-access-reviewer                                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/self-provisioners                                                            ClusterRole/self-provisioner                                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/spark-operator-controller                                                    ClusterRole/spark-operator-controller                                                   16d
+clusterrolebinding.rbac.authorization.k8s.io/spark-operator-webhook                                                       ClusterRole/spark-operator-webhook                                                      16d
+clusterrolebinding.rbac.authorization.k8s.io/storage-version-migration-migrator                                           ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-6LsxH9Hq2gfxmvvRBWvOdAqpeCiC83QLrzTTno              ClusterRole/strimzi-cluster-operator-6LsxH9Hq2gfxmvvRBWvOdAqpeCiC83QLrzTTno             20d
+clusterrolebinding.rbac.authorization.k8s.io/system-bootstrap-node-bootstrapper                                           ClusterRole/system:node-bootstrapper                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system-bootstrap-node-renewal                                                ClusterRole/system:certificates.k8s.io:certificatesigningrequests:selfnodeclient        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:basic-user                                                            ClusterRole/system:basic-user                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:build-strategy-docker-binding                                         ClusterRole/system:build-strategy-docker                                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:build-strategy-jenkinspipeline-binding                                ClusterRole/system:build-strategy-jenkinspipeline                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:build-strategy-source-binding                                         ClusterRole/system:build-strategy-source                                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:attachdetach-controller                                    ClusterRole/system:controller:attachdetach-controller                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:certificate-controller                                     ClusterRole/system:controller:certificate-controller                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:clusterrole-aggregation-controller                         ClusterRole/system:controller:clusterrole-aggregation-controller                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:cronjob-controller                                         ClusterRole/system:controller:cronjob-controller                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:daemon-set-controller                                      ClusterRole/system:controller:daemon-set-controller                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:deployment-controller                                      ClusterRole/system:controller:deployment-controller                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:disruption-controller                                      ClusterRole/system:controller:disruption-controller                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:endpoint-controller                                        ClusterRole/system:controller:endpoint-controller                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:endpointslice-controller                                   ClusterRole/system:controller:endpointslice-controller                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:endpointslicemirroring-controller                          ClusterRole/system:controller:endpointslicemirroring-controller                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:ephemeral-volume-controller                                ClusterRole/system:controller:ephemeral-volume-controller                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:expand-controller                                          ClusterRole/system:controller:expand-controller                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:generic-garbage-collector                                  ClusterRole/system:controller:generic-garbage-collector                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:horizontal-pod-autoscaler                                  ClusterRole/system:controller:horizontal-pod-autoscaler                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:job-controller                                             ClusterRole/system:controller:job-controller                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:legacy-service-account-token-cleaner                       ClusterRole/system:controller:legacy-service-account-token-cleaner                      24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:namespace-controller                                       ClusterRole/system:controller:namespace-controller                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:node-controller                                            ClusterRole/system:controller:node-controller                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:persistent-volume-binder                                   ClusterRole/system:controller:persistent-volume-binder                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:pod-garbage-collector                                      ClusterRole/system:controller:pod-garbage-collector                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:pv-protection-controller                                   ClusterRole/system:controller:pv-protection-controller                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:pvc-protection-controller                                  ClusterRole/system:controller:pvc-protection-controller                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:replicaset-controller                                      ClusterRole/system:controller:replicaset-controller                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:replication-controller                                     ClusterRole/system:controller:replication-controller                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:resource-claim-controller                                  ClusterRole/system:controller:resource-claim-controller                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:resourcequota-controller                                   ClusterRole/system:controller:resourcequota-controller                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:root-ca-cert-publisher                                     ClusterRole/system:controller:root-ca-cert-publisher                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:route-controller                                           ClusterRole/system:controller:route-controller                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:selinux-warning-controller                                 ClusterRole/system:controller:selinux-warning-controller                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:service-account-controller                                 ClusterRole/system:controller:service-account-controller                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:service-ca-cert-publisher                                  ClusterRole/system:controller:service-ca-cert-publisher                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:service-cidrs-controller                                   ClusterRole/system:controller:service-cidrs-controller                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:service-controller                                         ClusterRole/system:controller:service-controller                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:statefulset-controller                                     ClusterRole/system:controller:statefulset-controller                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:ttl-after-finished-controller                              ClusterRole/system:controller:ttl-after-finished-controller                             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:ttl-controller                                             ClusterRole/system:controller:ttl-controller                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:validatingadmissionpolicy-status-controller                ClusterRole/system:controller:validatingadmissionpolicy-status-controller               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:controller:volumeattributesclass-protection-controller                ClusterRole/system:controller:volumeattributesclass-protection-controller               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:deployer                                                              ClusterRole/system:deployer                                                             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:discovery                                                             ClusterRole/system:discovery                                                            24d
+clusterrolebinding.rbac.authorization.k8s.io/system:image-builder                                                         ClusterRole/system:image-builder                                                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:image-puller                                                          ClusterRole/system:image-puller                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:kube-controller-manager                                               ClusterRole/system:kube-controller-manager                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/system:kube-dns                                                              ClusterRole/system:kube-dns                                                             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:kube-scheduler                                                        ClusterRole/system:kube-scheduler                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:masters                                                               ClusterRole/system:master                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server                                                        ClusterRole/system:metrics-server                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:monitoring                                                            ClusterRole/system:monitoring                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node                                                                  ClusterRole/system:node                                                                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node-admin                                                            ClusterRole/system:node-admin                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node-admins                                                           ClusterRole/system:node-admin                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node-bootstrapper                                                     ClusterRole/system:node-bootstrapper                                                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node-proxier                                                          ClusterRole/system:node-proxier                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:node-proxiers                                                         ClusterRole/system:node-proxier                                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:oauth-token-deleters                                                  ClusterRole/system:oauth-token-deleter                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:build-config-change-controller                   ClusterRole/system:openshift:controller:build-config-change-controller                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:build-controller                                 ClusterRole/system:openshift:controller:build-controller                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:cluster-csr-approver-controller                  ClusterRole/system:openshift:controller:cluster-csr-approver-controller                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:cluster-quota-reconciliation-controller          ClusterRole/system:openshift:controller:cluster-quota-reconciliation-controller         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:default-rolebindings-controller                  ClusterRole/system:openshift:controller:default-rolebindings-controller                 24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:deployer-controller                              ClusterRole/system:openshift:controller:deployer-controller                             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:deploymentconfig-controller                      ClusterRole/system:openshift:controller:deploymentconfig-controller                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:horizontal-pod-autoscaler                        ClusterRole/system:openshift:controller:horizontal-pod-autoscaler                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:image-import-controller                          ClusterRole/system:openshift:controller:image-import-controller                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:image-trigger-controller                         ClusterRole/system:openshift:controller:image-trigger-controller                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:kube-apiserver-check-endpoints-auth-delegator    ClusterRole/system:auth-delegator                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:kube-apiserver-check-endpoints-crd-reader        ClusterRole/system:openshift:controller:check-endpoints-crd-reader                      24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:kube-apiserver-check-endpoints-node-reader       ClusterRole/system:openshift:controller:check-endpoints-node-reader                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:machine-approver                                 ClusterRole/system:openshift:controller:machine-approver                                24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:namespace-security-allocation-controller         ClusterRole/system:openshift:controller:namespace-security-allocation-controller        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:origin-namespace-controller                      ClusterRole/system:openshift:controller:origin-namespace-controller                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:podsecurity-admission-label-syncer-controller    ClusterRole/system:openshift:controller:podsecurity-admission-label-syncer-controller   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:privileged-namespaces-psa-label-syncer           ClusterRole/system:openshift:controller:privileged-namespaces-psa-label-syncer          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:pv-recycler-controller                           ClusterRole/system:openshift:controller:pv-recycler-controller                          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:resourcequota-controller                         ClusterRole/system:openshift:controller:resourcequota-controller                        24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:service-ca                                       ClusterRole/system:openshift:controller:service-ca                                      24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:service-ingress-ip-controller                    ClusterRole/system:openshift:controller:service-ingress-ip-controller                   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:serviceaccount-controller                        ClusterRole/system:openshift:controller:serviceaccount-controller                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:serviceaccount-pull-secrets-controller           ClusterRole/system:openshift:controller:serviceaccount-pull-secrets-controller          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:template-instance-controller                     ClusterRole/system:openshift:controller:template-instance-controller                    24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:template-instance-controller:admin               ClusterRole/admin                                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:template-instance-finalizer-controller           ClusterRole/system:openshift:controller:template-instance-finalizer-controller          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:template-instance-finalizer-controller:admin     ClusterRole/admin                                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:template-service-broker                          ClusterRole/system:openshift:controller:template-service-broker                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:controller:unidling-controller                              ClusterRole/system:openshift:controller:unidling-controller                             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:discovery                                                   ClusterRole/system:openshift:discovery                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:oauth-apiserver                                             ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-apiserver                                         ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-authentication                                    ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-controller-manager                                ClusterRole/system:openshift:openshift-controller-manager                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-controller-manager:image-trigger-controller       ClusterRole/system:openshift:openshift-controller-manager:image-trigger-controller      24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-controller-manager:ingress-to-route-controller    ClusterRole/system:openshift:openshift-controller-manager:ingress-to-route-controller   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-controller-manager:update-buildconfig-status      ClusterRole/system:openshift:openshift-controller-manager:update-buildconfig-status     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:openshift-route-controller-manager                          ClusterRole/system:openshift:openshift-route-controller-manager                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:authentication                                     ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:cloud-controller-manager                           ClusterRole/system:openshift:operator:cloud-controller-manager                          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:cluster-kube-scheduler-operator                    ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:etcd-backup-crb                                    ClusterRole/system:openshift:operator:etcd-backup-role                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:etcd-operator                                      ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-apiserver-operator                            ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-apiserver-recovery                            ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-controller-manager-operator                   ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-controller-manager-recovery                   ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-scheduler-recovery                            ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-scheduler:public-2                            ClusterRole/system:kube-scheduler                                                       24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:kube-storage-version-migrator-operator             ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-apiserver-operator                       ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-config-operator                          ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-controller-manager-operator              ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-etcd-installer                           ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-kube-apiserver-installer                 ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-kube-controller-manager-installer        ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:openshift-kube-scheduler-installer                 ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:operator:service-ca-operator                                ClusterRole/cluster-admin                                                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:public-info-viewer                                          ClusterRole/system:openshift:public-info-viewer                                         24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:scc:restricted-v2                                           ClusterRole/system:openshift:scc:restricted-v2                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:scc:restricted-v3                                           ClusterRole/system:openshift:scc:restricted-v3                                          24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:tokenreview-openshift-controller-manager                    ClusterRole/system:openshift:tokenreview-openshift-controller-manager                   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:tokenreview-openshift-route-controller-manager              ClusterRole/system:openshift:tokenreview-openshift-route-controller-manager             24d
+clusterrolebinding.rbac.authorization.k8s.io/system:openshift:useroauthaccesstoken-manager                                ClusterRole/system:openshift:useroauthaccesstoken-manager                               24d
+clusterrolebinding.rbac.authorization.k8s.io/system:public-info-viewer                                                    ClusterRole/system:public-info-viewer                                                   24d
+clusterrolebinding.rbac.authorization.k8s.io/system:scope-impersonation                                                   ClusterRole/system:scope-impersonation                                                  24d
+clusterrolebinding.rbac.authorization.k8s.io/system:sdn-readers                                                           ClusterRole/system:sdn-reader                                                           24d
+clusterrolebinding.rbac.authorization.k8s.io/system:service-account-issuer-discovery                                      ClusterRole/system:service-account-issuer-discovery                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:volume-scheduler                                                      ClusterRole/system:volume-scheduler                                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/system:webhooks                                                              ClusterRole/system:webhook                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/telemeter-client                                                             ClusterRole/telemeter-client                                                            6d1h
+clusterrolebinding.rbac.authorization.k8s.io/telemeter-client-view                                                        ClusterRole/cluster-monitoring-view                                                     24d
+clusterrolebinding.rbac.authorization.k8s.io/thanos-querier                                                               ClusterRole/thanos-querier                                                              24d
+clusterrolebinding.rbac.authorization.k8s.io/thanos-ruler                                                                 ClusterRole/thanos-ruler                                                                19d
+clusterrolebinding.rbac.authorization.k8s.io/thanos-ruler-monitoring                                                      ClusterRole/cluster-monitoring-view                                                     19d
+clusterrolebinding.rbac.authorization.k8s.io/vault-secrets-operator.v-1l9z9CfMptHTq9cYPNxAnHrZElvpt8fPXHB1M4              ClusterRole/vault-secrets-operator.v-1l9z9CfMptHTq9cYPNxAnHrZElvpt8fPXHB1M4             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/vault-secrets-operator.v-cOr4jl8bBEHg8iYdvVnq1ilXPsy3G2x3Vh30qi              ClusterRole/vault-secrets-operator.v-cOr4jl8bBEHg8iYdvVnq1ilXPsy3G2x3Vh30qi             4d1h
+clusterrolebinding.rbac.authorization.k8s.io/vault-server-binding                                                         ClusterRole/system:auth-delegator                                                       19d
+clusterrolebinding.rbac.authorization.k8s.io/volume-data-source-validator                                                 ClusterRole/volume-data-source-validator                                                24d
+
+Command API logs tail:
+INFO:     10.131.0.98:56424 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56472 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51366 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51396 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51402 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51376 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51386 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:51374 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50266 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50276 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50254 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50228 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50226 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:50286 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53600 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53608 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53570 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53586 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53618 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53590 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45448 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45460 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45440 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45412 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45428 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:45472 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53880 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53924 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53868 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53898 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53910 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:53888 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35764 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35758 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35732 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35748 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35774 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35752 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52422 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52384 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52400 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52414 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52404 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:52436 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55324 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55340 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55328 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55356 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55292 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:55308 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58416 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58432 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58404 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58440 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58388 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:58424 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56610 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56622 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56648 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56632 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56602 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:56630 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34968 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34934 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34940 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34966 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34950 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:34926 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33426 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33434 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33404 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33410 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33392 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:33418 - "GET /api/namespaces HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35498 - "GET /api/argocd/apps HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35476 - "GET /api/events HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35472 - "GET /api/incidents HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35456 - "GET /api/topology HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35452 - "GET /api/overview HTTP/1.0" 200 OK
+INFO:     10.131.0.98:35482 - "GET /api/namespaces HTTP/1.0" 200 OK
+
+Command UI API health endpoints:
+
+====================
+19. REPO FILES CLAIM CHECK
+====================
+apps count:
+27
+
+apps files:
+apps/airflow-monitoring.yaml
+apps/airflow.yaml
+apps/fraud-platform-spark-jobs.yaml
+apps/hive-metastore.yaml
+apps/kafka.yaml
+apps/keycloak.yaml
+apps/local-path-provisioner.yaml
+apps/minio.yaml
+apps/monitoring.yaml
+apps/namespaces.yaml
+apps/nifi.yaml
+apps/platform-command-ui.yaml
+apps/platform-spark.yaml
+apps/postgresql-monitoring.yaml
+apps/postgresql.yaml
+apps/rook-ceph-cluster.yaml
+apps/rook-ceph-operator.yaml
+apps/root.yaml
+apps/schema-registry.yaml
+apps/signal-engine.yaml
+apps/spark.yaml
+apps/superset.yaml
+apps/trino.yaml
+apps/vault-config.yaml
+apps/vault-monitoring.yaml
+apps/vault-secrets-operator.yaml
+apps/vault.yaml
+
+fraud schemas:
+fraud-platform/schemas/avro/audit-trail.avsc
+fraud-platform/schemas/avro/fraud-decisions.avsc
+fraud-platform/schemas/avro/fraud-scores.avsc
+fraud-platform/schemas/avro/transactions-enriched.avsc
+fraud-platform/schemas/avro/transactions-raw.avsc
+fraud-platform/schemas/avro/transactions-validated.avsc
+fraud-platform/schemas/iceberg/ddl.sql
+
+spark jobs:
+fraud-platform/spark-jobs/Dockerfile
+fraud-platform/spark-jobs/phase2/bronze_bootstrap.py
+fraud-platform/spark-jobs/phase2/bronze_to_kafka_replay.py
+fraud-platform/spark-jobs/phase2/Dockerfile
+fraud-platform/spark-jobs/phase3/Dockerfile
+fraud-platform/spark-jobs/phase3/job1_validation.py
+fraud-platform/spark-jobs/phase3/job2_enrichment.py
+fraud-platform/spark-jobs/phase3/job3_scoring.py
+fraud-platform/spark-jobs/phase3/job4_decision.py
+fraud-platform/spark-jobs/phase4/dag1_silver_writer.py
+
+dags:
+fraud-platform/dags/dag1_silver_writer.py
+fraud-platform/dags/dag2_daily_summary.py
+fraud-platform/dags/dag3_rule_performance.py
+fraud-platform/dags/dag4_uid_risk_profile.py
+fraud-platform/dags/dag5_hourly_pattern.py
+
+platform command ui files:
+platform/platform-command-ui/backend/app/main.py
+platform/platform-command-ui/backend/app/__pycache__/main.cpython-39.pyc
+platform/platform-command-ui/backend/Dockerfile
+platform/platform-command-ui/backend/requirements.txt
+platform/platform-command-ui/frontend/Dockerfile
+platform/platform-command-ui/frontend/index.html
+platform/platform-command-ui/frontend/nginx.conf
+platform/platform-command-ui/frontend/package.json
+platform/platform-command-ui/frontend/src/main.jsx
+platform/platform-command-ui/frontend/src/style.css
+platform/platform-command-ui/k8s/backend.yaml
+platform/platform-command-ui/k8s/frontend.yaml
+platform/platform-command-ui/k8s/kustomization.yaml
+platform/platform-command-ui/k8s/namespace.yaml
+platform/platform-command-ui/k8s/rbac.yaml
+
+docs files:
+docs/validation/platform-validation-20260510-125624.txt
+docs/validation/validate-platform.sh
+
+============================================================
+VALIDATION COMPLETE
+Saved to: docs/validation/platform-validation-20260510-125624.txt
+============================================================

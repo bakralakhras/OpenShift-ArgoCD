@@ -518,7 +518,7 @@ This is the current engineering truth of the platform.
 **Baker Al-Akhras**  
 Data & Platform Engineer
 
-[LinkedIn](https://www.linkedin.com/in/baker-al-akhras) · [GitHub](https://github.com/bakralakhras)
+[LinkedIn](https://www.linkedin.com/in/bakr-alakhras/) · [GitHub](https://github.com/bakralakhras) · [Portfolio](https://bakralakhras.github.io/portfolio/)
 
 ---
 

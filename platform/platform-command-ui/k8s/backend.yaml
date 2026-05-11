@@ -16,7 +16,7 @@ spec:
       serviceAccountName: command-api
       containers:
         - name: command-api
-          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-api:latest
+          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-api:v2-services
           ports:
             - containerPort: 8080
           env:

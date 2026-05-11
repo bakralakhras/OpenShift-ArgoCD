@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: command-ui
-          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-ui:latest
+          image: image-registry.openshift-image-registry.svc:5000/platform-command-ui/command-ui:v2-services
           ports:
             - containerPort: 8080
 ---

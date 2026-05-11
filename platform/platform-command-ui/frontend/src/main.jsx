@@ -11,8 +11,10 @@ import {
   Layers3,
   Workflow,
   Zap,
+  Compass,
 } from "lucide-react";
 
+import ServiceCatalog from "./ServiceCatalog";
 import "./style.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
@@ -22,6 +24,7 @@ const views = [
   "Infrastructure",
   "GitOps",
   "Data Platform",
+  "Platform Access",
   "Incidents",
 ];
 
@@ -54,6 +57,7 @@ function Sidebar({ active, setActive }) {
             {view === "Infrastructure" && <Server size={16} />}
             {view === "GitOps" && <GitBranch size={16} />}
             {view === "Data Platform" && <Database size={16} />}
+            {view === "Platform Access" && <Compass size={16} />}
             {view === "Incidents" && <ShieldAlert size={16} />}
             {view}
           </button>
@@ -359,6 +363,10 @@ function App() {
               </div>
             </div>
           </section>
+        )}
+
+        {view === "Platform Access" && (
+          <ServiceCatalog />
         )}
 
         {view === "Incidents" && (
